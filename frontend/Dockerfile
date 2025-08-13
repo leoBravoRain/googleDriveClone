@@ -1,6 +1,6 @@
 # SvelteKit Development Container
 # alpine is a lightweight linux distribution
-FROM node:18-alpine
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Expose port
-EXPOSE 3000
+EXPOSE 5173
 
 # Start development server
 # --host "0.0.0.0"**: Allows connections from outside the container
