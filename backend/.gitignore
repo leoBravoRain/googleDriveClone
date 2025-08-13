@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+.eggs/
+
+# Virtual environment
+.venv/
+env/
+venv/
+*.bak
+*.pyc
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+sdist/
+*.pth
+.tox/
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.DS_Store # macOS
+Thumbs.db # Windows
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Test/coverage
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Docker
+Dockerfile.bak
+*.bak
+
+# FastAPI specific
+# Uvicorn/Gunicorn related files
+*.pid
+.gunicorn_pid
+.uvicorn_pid
+
+# Other temporary files
+tmp/
+*.tmp
