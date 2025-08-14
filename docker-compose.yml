@@ -28,9 +28,32 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/filedrive
     # this is to hot-reloading
     volumes:
       - ./backend:/app
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # MongoDB Service
+  # TODO: maybe create a separate Dockerfile for MongoDB?
+  mongodb:
+    image: mongo:7.0
+    ports:
+    # TODO: Maybe remove, because this is to connect to the MongoDB container from the host machine.
+      - "27017:27017"
+    environment:
+      # TODO: hide these in .env file
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+      - MONGO_INITDB_DATABASE=filedrive
+    volumes:
+      - mongodb_data:/data/db
+      - ./data/mongo-init:/docker-entrypoint-initdb.d
     networks:
       - app-network
     restart: unless-stopped
@@ -38,3 +61,6 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mongodb_data:
