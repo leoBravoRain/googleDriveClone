@@ -52,39 +52,8 @@ This will start:
 
 ### 3. Setup MinIO Bucket (One-time setup)
 
-After starting the services, you need to create the MinIO bucket manually:
+After starting the services, create the MinIO bucket using the provided script:
 
-#### Option A: Using MinIO Console (Recommended)
-1. Open http://localhost:9001 in your browser
-2. Login with:
-   - **Username**: `minioadmin`
-   - **Password**: `minioadmin123`
-3. Click "Create Bucket"
-4. Enter bucket name: `filedrive`
-5. Click "Create Bucket"
-
-#### Option B: Using MinIO Client (Command Line)
-```bash
-# Connect to MinIO container
-docker exec -it googledriveclone-minio-1 sh
-
-# Set up MinIO client alias
-mc alias set myminio http://localhost:9000 minioadmin minioadmin123
-
-# Create bucket
-mc mb myminio/filedrive
-
-# Set bucket policy for download access
-mc anonymous set download myminio/filedrive
-
-# Verify bucket was created
-mc ls myminio
-
-# Exit container
-exit
-```
-
-#### Option C: Using the provided script
 ```bash
 # Make script executable (if not already)
 chmod +x scripts/init-minio.sh
@@ -144,12 +113,10 @@ googleDriveClone/
 │   ├── requirements.txt
 │   └── Dockerfile
 ├── data/                     # Data persistence
-│   ├── mongo-init/          # MongoDB initialization
-│   └── minio-init/          # MinIO initialization (reference)
+│   └── mongo-init/          # MongoDB initialization
 ├── scripts/                  # Utility scripts
 │   └── init-minio.sh        # MinIO bucket creation script
-├── docs/                     # Documentation
-│   └── minio-setup.md       # MinIO setup guide
+
 ├── docker-compose.yml        # Service orchestration
 └── README.md
 ```
