@@ -110,7 +110,7 @@ async def upload_file(file: UploadFile = File(...)):
             length=file_size,  # Let MinIO determine file size
             content_type=file.content_type
         )
-        
+
         # Save metadata to MongoDB
         database = get_database()
         files_collection = database.files
@@ -128,6 +128,7 @@ async def upload_file(file: UploadFile = File(...)):
             "updated_at": datetime.utcnow()
         }
         
+        # TODO: manage case when file was not uploaded to MinIO
         result = files_collection.insert_one(file_metadata)
         
         return {
