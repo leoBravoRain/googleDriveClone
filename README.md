@@ -35,7 +35,7 @@ A full-stack Google Drive clone built with SvelteKit, FastAPI, MongoDB, and MinI
 
 ### 1. Clone and Setup
 ```bash
-git clone <repository-url>
+git clone https://github.com/leoBravoRain/googleDriveClone
 cd googleDriveClone
 ```
 
