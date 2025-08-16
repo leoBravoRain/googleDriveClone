@@ -53,6 +53,23 @@
 		await fetchFiles();
 	}
 
+	async function handleDownload(fileId: string, filename: string) {
+		try {
+			const blob = await FileService.downloadFile(fileId);
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = filename;
+			document.body.appendChild(a);
+			a.click();
+			window.URL.revokeObjectURL(url);
+			document.body.removeChild(a);
+		} catch (error) {
+			console.error('Download failed:', error);
+			alert('Download failed, try again');
+		}
+	}
+
 </script>
 
 <div>
@@ -88,6 +105,7 @@
 						<th>Size</th>
 						<th>Type</th>
 						<th>Upload Date</th>
+						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -100,6 +118,9 @@
 							<td>{formatFileSize(file.size)}</td>
 							<td>{file.file_type}</td>
 							<td>{formatDate(file.upload_date)}</td>
+							<td>
+								<button onclick={() => handleDownload(file.file_id, file.filename)}>Download</button>
+							</td>
 						</tr>
 					{/each}
 				</tbody>
