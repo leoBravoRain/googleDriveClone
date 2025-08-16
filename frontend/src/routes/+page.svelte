@@ -3,8 +3,8 @@
 
 	import type { FileData } from '../types/files.types';
 
-	import { formatDate, formatFileSize } from '../utils/formatters.utils';
 	import { FileService } from '$lib/services/files.service';
+	import { formatDate, formatFileSize } from '$lib/utils/formatters.utils';
 	
 	// State variables
 	let files: FileData[] = [];
