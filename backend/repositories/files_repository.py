@@ -30,3 +30,13 @@ class FileRepository:
         except Exception as e:
             print(f"Error getting all files: {e}")
             raise e
+    
+    def save_file_metadata(self, file_metadata: FileModel):
+        """
+        Save file metadata to database
+        """
+        try:
+            self.collection.insert_one(file_metadata)
+        except Exception as e:
+            print(f"Error saving file metadata: {e}")
+            raise e

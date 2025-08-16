@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, UploadFile, File
 from services.files_service import FileService
 
 module_name = 'files'
@@ -24,3 +24,19 @@ async def get_files():
             "files": [],
             "total": 0
         } 
+
+@router.post('/')
+async def upload_file(file: UploadFile = File(...)):
+    """Upload file to object storage and save metadata to database"""
+    try:
+        response = await FileService().upload_file(file)
+        return response
+    
+    # TODO: normalize response
+    except Exception as e:
+        return {
+            "error": f"Failed to upload file: {str(e)}",
+            "file_id": None,
+            "filename": None,
+            "size": None
+        }

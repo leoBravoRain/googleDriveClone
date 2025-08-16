@@ -10,7 +10,7 @@ from fastapi.responses import StreamingResponse
 from core.database import connect_to_mongo, close_mongo_connection
 from core.minio_client import connect_to_minio, close_minio_connection
 from services.files_service import FileService
-from routes.files import router as files_router
+from routes.files_router import router as files_router
 
 app = FastAPI(
     title="Google Drive Clone API",
@@ -60,86 +60,6 @@ async def health_check():
         "status": "healthy",
         "service": "google-drive-clone-api"
     }
-
-# # TODO: manage pagination?
-# @app.get("/api/files")
-# async def get_files():
-#     """Get all files from MongoDB using PyMongo"""
-#     try:
-
-#         # use service
-#         files = FileService().get_all_files()
-        
-#         return {
-#             "files": files,
-#             "total": len(files)
-#         }
-#     except Exception as e:
-#         return {
-#             "error": f"Failed to fetch files: {str(e)}",
-#             "files": [],
-#             "total": 0
-#         } 
-        
-# @app.post("/api/files")
-# async def upload_file(file: UploadFile = File(...)):
-#     """Upload a file to MinIO and save metadata to MongoDB."""
-#     try:
-#         # Get MinIO client and bucket name
-#         minio_client = get_minio_client()
-#         bucket_name = get_bucket_name()
-        
-#         # Generate unique file ID
-#         file_id = str(uuid.uuid4())
-        
-#         # Create file path in MinIO
-#         file_path = f"{file_id}/{file.filename}"
-        
-#         # Read file content
-#         file_content = await file.read()
-#         file_size = len(file_content)
-#         # Reset file pointer to beginning
-#         await file.seek(0)
-        
-#         # Upload file to MinIO
-#         minio_client.put_object(
-#             bucket_name=bucket_name,
-#             object_name=file_path,
-#             data=file.file,
-#             length=file_size,  # Let MinIO determine file size
-#             content_type=file.content_type
-#         )
-
-#         # Save metadata to MongoDB
-#         database = get_database()
-#         files_collection = database.files
-        
-#         file_metadata = {
-#             "file_id": file_id,
-#             "filename": file.filename,
-#             "original_name": file.filename,
-#             "size": file_size,  # We'll update this later if needed
-#             "file_type": file.content_type,
-#             "upload_date": datetime.utcnow(),
-#             "storage_path": file_path,
-#             "user_id": None,  # Will be used when we add authentication
-#             "created_at": datetime.utcnow(),
-#             "updated_at": datetime.utcnow()
-#         }
-        
-#         # TODO: manage case when file was not uploaded to MinIO
-#         result = files_collection.insert_one(file_metadata)
-        
-#         return {
-#             "message": "File uploaded successfully",
-#             "file_id": file_id,
-#             "filename": file.filename,
-#             "size": file_metadata["size"]
-#         }
-        
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
-    
     
 # @app.get("/api/files/{file_id}/download")
 # async def download_file(file_id: str):
