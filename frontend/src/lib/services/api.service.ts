@@ -29,3 +29,18 @@ export async function apiRequest<T>(endpoint: string, options?: RequestInit): Pr
 
     return response.json();
 }
+
+export async function apiBlobRequest(endpoint: string, options?: RequestInit): Promise<Blob> {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        ...options,
+        headers: {
+            ...options?.headers,
+        },
+    });
+
+    if (!response.ok) {
+        throw new ApiError(response.status, `HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    return response.blob();
+}   
