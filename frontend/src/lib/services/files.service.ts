@@ -19,4 +19,10 @@ export class FileService {
     static async downloadFile(fileId: string): Promise<Blob> {
         return apiBlobRequest(`files/${fileId}/download`);
     }
+
+    static async deleteFile(fileId: string): Promise<void> {
+        return apiRequest<void>(`files/${fileId}`, {
+            method: 'DELETE',
+        })
+    }
 }

@@ -70,6 +70,12 @@
 		}
 	}
 
+	async function handleDelete(fileId: string) {
+		if (confirm('Are you sure you want to delete this file?')) {
+			await FileService.deleteFile(fileId);
+			await fetchFiles();
+		}
+	}
 </script>
 
 <div>
@@ -120,6 +126,7 @@
 							<td>{formatDate(file.upload_date)}</td>
 							<td>
 								<button onclick={() => handleDownload(file.file_id, file.filename)}>Download</button>
+								<button onclick={() => handleDelete(file.file_id)}>Delete</button>
 							</td>
 						</tr>
 					{/each}
