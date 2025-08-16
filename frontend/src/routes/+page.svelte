@@ -114,72 +114,130 @@
 	}
 </script>
 
-<div>
-	<h1>Google Drive Clone - File Manager</h1>
-	
-	<!-- Loading state -->
-	{#if loading}
-		<div>
-			<p>Loading files...</p>
-		</div>
-	{:else if error}
-		<div>
-			<p>{error}</p>
-		</div>
-	{:else}
-
-		<!-- upload file -->
-		<div>
-			<label for="fileInput">Upload File</label>
-			<input type="file" bind:files={fileInput} id="fileInput" name="fileInput" accept="image/*, video/*, audio/*, .pdf, .txt, .zip, .rar"/>
-			<button onclick={handleUpload}>Upload</button>
-		</div>
-
-		{#if files.length === 0}
-			<div>
-				<p>No files found. Upload some files to get started!</p>
+<div class="min-h-screen bg-gray-50 p-4">
+	<div class="max-w-6xl mx-auto">
+		<h1 class="text-3xl font-bold text-gray-800 mb-8">Google Drive Clone</h1>
+		
+		<!-- Loading state -->
+		{#if loading}
+			<div class="flex justify-center items-center py-12">
+				<div class="text-gray-600">Loading files...</div>
+			</div>
+		{:else if error}
+			<div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+				<p class="text-red-700">{error}</p>
 			</div>
 		{:else}
-			<table>
-				<thead>
-					<tr>
-						<th>File</th>
-						<th>Size</th>
-						<th>Type</th>
-						<th>Upload Date</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each files as file}
-						<tr>
-							<td>
-								<span>{getFileIcon(file.file_type)}</span>
-								{#if editingFileId === file.file_id}
-									<input 
-										type="text" 
-										bind:value={editingFileName}
-										onkeydown={handleKeyPress}
-										autofocus
-									/>
-									<button onclick={saveEdit}>Save</button>
-									<button onclick={cancelEdit}>Cancel</button>
-								{:else}
-									<span>{file.filename}</span>
-								{/if}
-							</td>
-							<td>{formatFileSize(file.size)}</td>
-							<td>{file.file_type}</td>
-							<td>{formatDate(file.upload_date)}</td>
-							<td>
-								<button onclick={() => handleDownload(file.file_id, file.filename)}>Download</button>
-								<button onclick={() => handleDelete(file.file_id)}>Delete</button>
-								<button onclick={() => startEdit(file.file_id, file.filename)}>Rename</button>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+			<!-- Upload section -->
+			<div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+				<label for="fileInput" class="block text-sm font-medium text-gray-700 mb-2">Upload File</label>
+				<div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+					<input 
+						type="file" 
+						bind:files={fileInput} 
+						id="fileInput" 
+						name="fileInput" 
+						accept="image/*, video/*, audio/*, .pdf, .txt, .zip, .rar"
+						class="w-full sm:flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+					/>
+					<button 
+						onclick={handleUpload}
+						class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+					>
+						Upload
+					</button>
+				</div>
+			</div>
+
+			<!-- File list -->
+			{#if files.length === 0}
+				<div class="bg-white rounded-lg shadow-sm border p-12 text-center">
+					<p class="text-gray-500">No files found. Upload some files to get started!</p>
+				</div>
+			{:else}
+				<div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+					<div class="overflow-x-auto">
+						<table class="w-full">
+							<thead class="bg-gray-50">
+								<tr>
+									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
+									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Upload Date</th>
+									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+								</tr>
+							</thead>
+							<tbody class="bg-white divide-y divide-gray-200">
+								{#each files as file}
+									<tr class="hover:bg-gray-50">
+										<td class="px-6 py-4 whitespace-nowrap">
+											<div class="flex items-center">
+												<span class="text-xl mr-3">{getFileIcon(file.file_type)}</span>
+												{#if editingFileId === file.file_id}
+													<div class="flex items-center gap-2">
+														<input 
+															type="text" 
+															bind:value={editingFileName}
+															onkeydown={handleKeyPress}
+															autofocus
+															class="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+														/>
+														<button 
+															onclick={saveEdit}
+															class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
+														>
+															Save
+														</button>
+														<button 
+															onclick={cancelEdit}
+															class="px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700"
+														>
+															Cancel
+														</button>
+													</div>
+												{:else}
+													<span class="text-sm font-medium text-gray-900">{file.filename}</span>
+												{/if}
+											</div>
+										</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+											{formatFileSize(file.size)}
+										</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+											{file.file_type}
+										</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+											{formatDate(file.upload_date)}
+										</td>
+										<td class="px-6 py-4 whitespace-nowrap text-sm">
+											<div class="flex gap-2">
+												<button 
+													onclick={() => handleDownload(file.file_id, file.filename)}
+													class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+												>
+													Download
+												</button>
+												<button 
+													onclick={() => startEdit(file.file_id, file.filename)}
+													class="px-3 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700 transition-colors"
+												>
+													Rename
+												</button>
+												<button 
+													onclick={() => handleDelete(file.file_id)}
+													class="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+												>
+													Delete
+												</button>
+											</div>
+										</td>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			{/if}
 		{/if}
-	{/if}
+	</div>
 </div>
