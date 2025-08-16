@@ -1,5 +1,5 @@
 // TODO: move to .env file?
-export const API_BASE_URL = 'http://localhost:8000/api/';
+export const API_BASE_URL = 'http://localhost:8000/api/v1/';
 
 export class ApiError extends Error {
     constructor(public status: number, message: string) {
