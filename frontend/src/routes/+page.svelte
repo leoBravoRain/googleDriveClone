@@ -11,6 +11,8 @@
 	let loading = true;
 	let error = '';
 	let fileInput: FileList | null = null;
+	let editingFileId: string | null = null;
+	let editingFileName: string = '';
 
 	// Get file icon based on type
 	function getFileIcon(fileType: string): string {
@@ -76,6 +78,40 @@
 			await fetchFiles();
 		}
 	}
+
+	function startEdit(fileId: string, currentName: string) {
+		editingFileId = fileId;
+		editingFileName = currentName;
+	}
+
+	function cancelEdit() {
+		editingFileId = null;
+		editingFileName = '';
+	}
+
+	async function saveEdit() {
+		if (!editingFileId || editingFileName.trim() === '') {
+			alert('File name cannot be empty');
+			return;
+		}
+
+		try {
+			await FileService.renameFile(editingFileId, editingFileName.trim());
+			await fetchFiles(); // Reload files to get updated data
+			cancelEdit();
+		} catch (error) {
+			console.error('Rename failed:', error);
+			alert('Failed to rename file');
+		}
+	}
+
+	function handleKeyPress(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			saveEdit();
+		} else if (event.key === 'Escape') {
+			cancelEdit();
+		}
+	}
 </script>
 
 <div>
@@ -119,7 +155,18 @@
 						<tr>
 							<td>
 								<span>{getFileIcon(file.file_type)}</span>
-								<span>{file.filename}</span>
+								{#if editingFileId === file.file_id}
+									<input 
+										type="text" 
+										bind:value={editingFileName}
+										onkeydown={handleKeyPress}
+										autofocus
+									/>
+									<button onclick={saveEdit}>Save</button>
+									<button onclick={cancelEdit}>Cancel</button>
+								{:else}
+									<span>{file.filename}</span>
+								{/if}
 							</td>
 							<td>{formatFileSize(file.size)}</td>
 							<td>{file.file_type}</td>
@@ -127,6 +174,7 @@
 							<td>
 								<button onclick={() => handleDownload(file.file_id, file.filename)}>Download</button>
 								<button onclick={() => handleDelete(file.file_id)}>Delete</button>
+								<button onclick={() => startEdit(file.file_id, file.filename)}>Rename</button>
 							</td>
 						</tr>
 					{/each}

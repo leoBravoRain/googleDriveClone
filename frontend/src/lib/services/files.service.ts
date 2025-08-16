@@ -22,7 +22,13 @@ export class FileService {
 
     static async deleteFile(fileId: string): Promise<void> {
         return apiRequest<void>(`files/${fileId}`, {
-            method: 'DELETE',
-        })
+            method: 'DELETE'
+        });
+    }
+
+    static async renameFile(fileId: string, newName: string): Promise<void> {
+        return apiRequest<void>(`files/${fileId}?file_name=${encodeURIComponent(newName)}`, {
+            method: 'PATCH'
+        });
     }
 }
