@@ -66,7 +66,8 @@ async def get_files():
         files_collection = database.files
         
         # Find all files (synchronous operation with PyMongo)
-        files = list(files_collection.find({}).limit(100))  # Limit to 100 files
+        # TODO: manage pagination?
+        files = list(files_collection.find({}))  # Limit to 100 files
         
         # Convert ObjectId to string for JSON serialization
         # This becasue ObjectId is not serializable by default
