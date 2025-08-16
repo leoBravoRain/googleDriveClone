@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from services.files_service import FileService
 
 module_name = 'files'
+# tags is for swagger documentation
 router = APIRouter(prefix=f'/{module_name}', tags=[module_name])
 
 # # TODO: manage pagination?

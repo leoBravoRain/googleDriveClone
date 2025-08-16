@@ -28,8 +28,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+api_base_path = '/api/v1'
 # add files router
-app.include_router(files_router, prefix = '/api/v1')
+app.include_router(files_router, prefix = api_base_path)
 
 @app.on_event("startup")
 def startup_db_client():
