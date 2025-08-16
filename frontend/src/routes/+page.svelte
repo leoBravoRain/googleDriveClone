@@ -10,6 +10,7 @@
 	let files: FileData[] = [];
 	let loading = true;
 	let error = '';
+	let fileInput: FileList | null = null;
 
 	// Get file icon based on type
 	function getFileIcon(fileType: string): string {
@@ -22,18 +23,35 @@
 		return '📁';
 	}
 	
-	onMount(async() => {
+
+	async function fetchFiles() {
 		try {
 			loading = true;
 			error = '';
 			files = await FileService.getFiles();
-		} catch (err) {
+		}
+		catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to load files';
 			console.error('Error loading files:', err);
-		} finally {
+		}
+		finally {
 			loading = false;
 		}
+	}
+
+	onMount(async() => {
+		await fetchFiles();
 	});
+
+	async function handleUpload() {
+		if (!fileInput || fileInput.length === 0) return;
+		const file = fileInput[0];
+		const uploadedFile = await FileService.uploadFile(file);
+		// TODO: error handling?
+
+		// reload files
+		await fetchFiles();
+	}
 
 </script>
 
@@ -50,6 +68,14 @@
 			<p>{error}</p>
 		</div>
 	{:else}
+
+		<!-- upload file -->
+		<div>
+			<label for="fileInput">Upload File</label>
+			<input type="file" bind:files={fileInput} id="fileInput" name="fileInput" accept="image/*, video/*, audio/*, .pdf, .txt, .zip, .rar"/>
+			<button onclick={handleUpload}>Upload</button>
+		</div>
+
 		{#if files.length === 0}
 			<div>
 				<p>No files found. Upload some files to get started!</p>

@@ -6,4 +6,13 @@ export class FileService {
     static async getFiles(): Promise<FileData[]> {
         return apiRequest<{files: FileData[]}>('files').then(data => data.files)
     }
+
+    static async uploadFile(file: File): Promise<FileData> {
+        const formData = new FormData();
+        formData.append('file', file);
+        return apiRequest<FileData>('files', {
+            method: 'POST',
+            body: formData,
+        })
+    }
 }

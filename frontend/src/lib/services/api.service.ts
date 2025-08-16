@@ -8,9 +8,16 @@ export class ApiError extends Error {
 }
 
 export async function apiRequest<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const headers: Record<string, string> = {};
+    
+    // Only set Content-Type if not sending FormData
+    if (!(options?.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
+    
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         headers: {
-            'Content-Type': 'application/json',
+            ...headers,
             ...options?.headers,
         },
         ...options,
