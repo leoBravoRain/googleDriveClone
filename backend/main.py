@@ -6,6 +6,8 @@ from minio_client import connect_to_minio, close_minio_connection, get_minio_cli
 import uuid
 from datetime import datetime
 import io
+from minio.error import S3Error
+from fastapi.responses import StreamingResponse
 
 app = FastAPI(
     title="Google Drive Clone API",
@@ -140,3 +142,45 @@ async def upload_file(file: UploadFile = File(...)):
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+    
+    
+@app.get("/api/files/{file_id}/download")
+async def download_file(file_id: str):
+    """Download a file with the given file_id"""
+    try:
+        # get database
+        database = get_database()
+        files_collection = database.files
+        
+        # try to get filemetadata
+        file_metadata = files_collection.find_one({"file_id": file_id})
+        
+        if not file_metadata:
+            raise HTTPException(status_code = 404, detail = f"File with id {file_id} not found")
+        
+        # get minio client and bucket name
+        minio_client = get_minio_client()
+        bucket_name = get_bucket_name()
+        
+        try:
+            response = minio_client.get_object(
+                bucket_name = bucket_name,
+                object_name = file_metadata["storage_path"]
+            )
+        except S3Error as e:
+            raise HTTPException(status_code = 500, detail = f"Download failed: {str(e)}")
+        
+        # return the file   
+        return StreamingResponse(
+            response.stream(32*1024),
+            media_type = file_metadata["file_type"],
+            headers = {
+                    "Content-Disposition": f"attachment; filename={file_metadata['filename']}",
+                    "Content-Length": str(file_metadata["size"])
+            }
+        )
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code = 500, detail =f"Download failed: {str(e)}")
