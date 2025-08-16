@@ -59,3 +59,18 @@ class FileRepository:
         except Exception as e:
             print(f"Error saving file metadata: {e}")
             raise e
+
+    def delete_file(self, file_id: str) -> bool:
+        """
+        Delete a file record by file_id
+        Args:
+            file_id: The unique identifier of the file
+        Returns: True if deleted, False if not found
+        """
+        try:
+            result = self.collection.delete_one({"file_id": file_id})
+            return result.deleted_count > 0
+            
+        except Exception as e:
+            print(f"Error deleting file {file_id}: {e}")
+            raise e

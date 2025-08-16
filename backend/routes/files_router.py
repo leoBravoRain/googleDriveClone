@@ -64,3 +64,16 @@ async def download_file(file_id: str):
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/{file_id}")
+async def delete_file(file_id: str):
+    """Delete a file by file_id"""
+    try:
+        file_service = FileService()
+        result = file_service.delete_file(file_id)
+        return result
+        
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

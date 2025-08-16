@@ -114,6 +114,48 @@ class FileService:
         except Exception as e:
             raise Exception(f"Download failed: {str(e)}")
         
+    def delete_file(self, file_id: str):
+        """
+        Delete a file by file_id from both MinIO and MongoDB
+        Args:
+            file_id: The unique identifier of the file
+        Returns: Success message
+        """
+        try:
+            # Get file metadata from database
+            file_metadata = self.file_repository.get_file_by_id(file_id)
+            
+            if not file_metadata:
+                raise FileNotFoundError(f"File with id {file_id} not found")
+            
+            # Delete file from MinIO
+            minio_client = get_minio_client()
+            bucket_name = get_bucket_name()
+            
+            try:
+                minio_client.remove_object(
+                    bucket_name=bucket_name,
+                    object_name=file_metadata["storage_path"]
+                )
+            except S3Error as e:
+                print(f"Warning: File not found in MinIO, but it was deleted from MongoDB: {e}")
+            
+            # Delete file metadata from database
+            deleted = self.file_repository.delete_file(file_id)
+            
+            if not deleted:
+                raise FileNotFoundError(f"File with id {file_id} not found")
+            
+            return {
+                "message": "File deleted successfully",
+                "file_id": file_id
+            }
+                
+        except FileNotFoundError:
+            raise
+        except Exception as e:
+            raise Exception(f"Delete failed: {str(e)}")
+        
         
         
         
