@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	import type { FileData } from '../types/files.types';
+	import type { FileData } from '$lib/types/files.types';
 
 	import { FileService } from '$lib/services/files.service';
 	import { formatDate, formatFileSize } from '$lib/utils/formatters.utils';
@@ -10,10 +10,6 @@
 	let files: FileData[] = [];
 	let loading = true;
 	let error = '';
-	
-	onMount(async() => {
-		files = await FileService.getFiles();
-	});
 
 	// Get file icon based on type
 	function getFileIcon(fileType: string): string {
@@ -26,6 +22,19 @@
 		return '📁';
 	}
 	
+	onMount(async() => {
+		try {
+			loading = true;
+			error = '';
+			files = await FileService.getFiles();
+		} catch (err) {
+			error = err instanceof Error ? err.message : 'Failed to load files';
+			console.error('Error loading files:', err);
+		} finally {
+			loading = false;
+		}
+	});
+
 </script>
 
 <div>
