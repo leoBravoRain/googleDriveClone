@@ -66,6 +66,7 @@ async def get_files():
         
         # Find all files (synchronous operation with PyMongo)
         # TODO: manage pagination?
+        # TODO: fields to select are: name, size, upload date, file type
         files = list(files_collection.find({}))  # Limit to 100 files
         
         # Convert ObjectId to string for JSON serialization
