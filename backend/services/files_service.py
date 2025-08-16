@@ -74,7 +74,7 @@ class FileService:
         Download a file by file_id
         Args:
             file_id: The unique identifier of the file
-        Returns: File data as bytes
+        Returns: File data with metadata
         """
         try:
             # Get file metadata from database
@@ -83,14 +83,10 @@ class FileService:
             if not file_metadata:
                 raise FileNotFoundError(f"File with id {file_id} not found")
             
-            # Get MinIO client and bucket name
-            minio_client = get_minio_client()
-            bucket_name = get_bucket_name()
-            
             try:
                 # Get file from MinIO
-                response = minio_client.get_object(
-                    bucket_name=bucket_name,
+                response = self.minio_client.get_object(
+                    bucket_name=self.bucket_name,
                     object_name=file_metadata["storage_path"]
                 )
                 
@@ -129,12 +125,9 @@ class FileService:
                 raise FileNotFoundError(f"File with id {file_id} not found")
             
             # Delete file from MinIO
-            minio_client = get_minio_client()
-            bucket_name = get_bucket_name()
-            
             try:
-                minio_client.remove_object(
-                    bucket_name=bucket_name,
+                self.minio_client.remove_object(
+                    bucket_name=self.bucket_name,
                     object_name=file_metadata["storage_path"]
                 )
             except S3Error as e:
