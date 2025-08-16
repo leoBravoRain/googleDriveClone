@@ -5,7 +5,6 @@ from database import connect_to_mongo, close_mongo_connection, get_database
 from minio_client import connect_to_minio, close_minio_connection, get_minio_client, get_bucket_name
 import uuid
 from datetime import datetime
-import io
 from minio.error import S3Error
 from fastapi.responses import StreamingResponse
 
@@ -185,3 +184,43 @@ async def download_file(file_id: str):
         raise e
     except Exception as e:
         raise HTTPException(status_code = 500, detail =f"Download failed: {str(e)}")
+    
+@app.patch("/api/files/{file_id}")
+async def update_file(file_id: str, file_name: str):
+    """Update the file name of the file with the given file_id"""
+    try:
+        
+        # Validate file_name is not empty
+        if not file_name or len(file_name.strip()) == 0:
+            raise HTTPException(
+                status_code=400, 
+                detail="File name cannot be empty"
+            )
+            
+        # get database
+        database = get_database()
+        files_collection = database.files
+        
+        # TODO: check if keep the file extension
+        file_metadata = files_collection.find_one_and_update({
+            "file_id": file_id
+        }, {
+            "$set": {
+                "filename": file_name
+            }
+        })
+        
+        if not file_metadata:
+            raise HTTPException(status_code = 404, detail = f"File with id {file_id} not found")
+        
+        return {
+            "message": "File updated successfully",
+            "file_id": file_id,
+            "filename": file_name
+        }
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code = 500, detail = f"Update failed: {str(e)}")
+    
+    
