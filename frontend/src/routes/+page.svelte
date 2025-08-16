@@ -48,11 +48,16 @@
 	async function handleUpload() {
 		if (!fileInput || fileInput.length === 0) return;
 		const file = fileInput[0];
-		const uploadedFile = await FileService.uploadFile(file);
-		// TODO: error handling?
-
-		// reload files
-		await fetchFiles();
+		try {
+			const uploadedFile = await FileService.uploadFile(file);
+			// Clear the form after successful upload
+			fileInput = null;
+			// reload files
+			await fetchFiles();
+		} catch (error) {
+			console.error('Upload failed:', error);
+			alert('Upload failed, try again');
+		}
 	}
 
 	async function handleDownload(fileId: string, filename: string) {
@@ -142,7 +147,8 @@
 					/>
 					<button 
 						onclick={handleUpload}
-						class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+						disabled={loading || !fileInput || fileInput.length === 0}
+						class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 cursor-pointer"
 					>
 						Upload
 					</button>
@@ -184,13 +190,13 @@
 														/>
 														<button 
 															onclick={saveEdit}
-															class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700"
+															class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 cursor-pointer"
 														>
 															Save
 														</button>
 														<button 
 															onclick={cancelEdit}
-															class="px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700"
+															class="px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 cursor-pointer"
 														>
 															Cancel
 														</button>
@@ -213,19 +219,19 @@
 											<div class="flex gap-2">
 												<button 
 													onclick={() => handleDownload(file.file_id, file.filename)}
-													class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+													class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors cursor-pointer"
 												>
 													Download
 												</button>
 												<button 
 													onclick={() => startEdit(file.file_id, file.filename)}
-													class="px-3 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700 transition-colors"
+													class="px-3 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700 transition-colors cursor-pointer"
 												>
 													Rename
 												</button>
 												<button 
 													onclick={() => handleDelete(file.file_id)}
-													class="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+													class="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors cursor-pointer"
 												>
 													Delete
 												</button>
