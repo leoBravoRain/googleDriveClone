@@ -11,6 +11,10 @@
 	let loading = true;
 	let error = '';
 	
+	onMount(async() => {
+		files = await FileService.getFiles();
+	});
+
 	// Get file icon based on type
 	function getFileIcon(fileType: string): string {
 		if (fileType.startsWith('image/')) return '🖼️';
@@ -22,9 +26,6 @@
 		return '📁';
 	}
 	
-	onMount(async() => {
-		files = await FileService.getFiles();
-	});
 </script>
 
 <div>
