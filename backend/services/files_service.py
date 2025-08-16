@@ -156,6 +156,39 @@ class FileService:
         except Exception as e:
             raise Exception(f"Delete failed: {str(e)}")
         
+    def update_file_name(self, file_id: str, new_filename: str):
+        """
+        Update file name by file_id
+        Args:
+            file_id: The unique identifier of the file
+            new_filename: New name for the file
+        Returns: Updated file information
+        """
+        try:
+            # Validate file_name is not empty
+            if not new_filename or len(new_filename.strip()) == 0:
+                raise ValueError("File name cannot be empty")
+            
+            # Update file name in database
+            updated_file = self.file_repository.update_file_name(file_id, new_filename.strip())
+            
+            if not updated_file:
+                raise FileNotFoundError(f"File with id {file_id} not found")
+            
+            # TODO: normalize response
+            return {
+                "message": "File updated successfully",
+                "file_id": file_id,
+                "filename": new_filename.strip()
+            }
+                
+        except ValueError:
+            raise
+        except FileNotFoundError:
+            raise
+        except Exception as e:
+            raise Exception(f"Update failed: {str(e)}")
+        
         
         
         

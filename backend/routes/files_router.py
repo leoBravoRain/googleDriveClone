@@ -77,3 +77,18 @@ async def delete_file(file_id: str):
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.patch("/{file_id}")
+async def update_file(file_id: str, file_name: str):
+    """Update the file name of the file with the given file_id"""
+    try:
+        file_service = FileService()
+        result = file_service.update_file_name(file_id, file_name)
+        return result
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

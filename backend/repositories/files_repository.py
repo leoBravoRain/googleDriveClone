@@ -3,6 +3,7 @@ from pymongo.database import Database
 from pymongo.collection import Collection
 from core.database import get_database
 from models.file_model import FileModel
+from datetime import datetime
 
 class FileRepository: 
     
@@ -73,4 +74,32 @@ class FileRepository:
             
         except Exception as e:
             print(f"Error deleting file {file_id}: {e}")
+            raise e
+
+    def update_file_name(self, file_id: str, new_filename: str) -> Optional[dict]:
+        """
+        Update file name by file_id
+        Args:
+            file_id: The unique identifier of the file
+            new_filename: New name for the file
+        Returns: Updated file document or None if not found
+        """
+        try:
+            
+            # Update the document
+            result = self.collection.find_one_and_update(
+                {"file_id": file_id},
+                {
+                    "$set": {
+                        "filename": new_filename,
+                        "updated_at": datetime.utcnow()
+                    }
+                },
+                return_document=True  # Return the updated document
+            )
+            
+            return result
+            
+        except Exception as e:
+            print(f"Error updating file name for {file_id}: {e}")
             raise e
