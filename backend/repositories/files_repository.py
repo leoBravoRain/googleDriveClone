@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pymongo.database import Database
 from pymongo.collection import Collection
 from core.database import get_database
@@ -29,6 +29,25 @@ class FileRepository:
             
         except Exception as e:
             print(f"Error getting all files: {e}")
+            raise e
+    
+    def get_file_by_id(self, file_id: str) -> Optional[dict]:
+        """
+        Get a single file by file_id
+        Args:
+            file_id: The unique identifier of the file
+        Returns: File document or None if not found
+        """
+        try:
+            file = self.collection.find_one({"file_id": file_id})
+            
+            if file and '_id' in file:
+                file['_id'] = str(file['_id'])
+            
+            return file
+            
+        except Exception as e:
+            print(f"Error getting file by ID {file_id}: {e}")
             raise e
     
     def save_file_metadata(self, file_metadata: FileModel):

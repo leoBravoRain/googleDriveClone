@@ -1,5 +1,7 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi.responses import StreamingResponse
 from services.files_service import FileService
+import io
 
 module_name = 'files'
 # tags is for swagger documentation
@@ -40,3 +42,25 @@ async def upload_file(file: UploadFile = File(...)):
             "filename": None,
             "size": None
         }
+
+@router.get("/{file_id}/download")
+async def download_file(file_id: str):
+    """Download a file by file_id"""
+    try:
+        file_service = FileService()
+        file_data = file_service.download_file(file_id)
+        
+        # Create streaming response
+        return StreamingResponse(
+            io.BytesIO(file_data["data"]),
+            media_type=file_data["content_type"],
+            headers={
+                "Content-Disposition": f"attachment; filename={file_data['filename']}",
+                "Content-Length": str(file_data["size"])
+            }
+        )
+        
+    except FileNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
