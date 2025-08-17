@@ -12,19 +12,6 @@ db.files.createIndex({ "filename": 1 });
 db.files.createIndex({ "upload_date": -1 });
 db.files.createIndex({ "file_type": 1 });
 
-// Insert a sample document to verify the setup
-db.files.insertOne({
-    filename: "sample.txt",
-    original_name: "sample.txt",
-    size: 1024,
-    file_type: "text/plain",
-    upload_date: new Date(),
-    storage_path: "sample/sample.txt",
-    user_id: null, // Will be used when we add authentication
-    created_at: new Date(),
-    updated_at: new Date()
-});
-
 print("MongoDB initialization completed successfully!");
 print("Database: filedrive");
 print("Collection: files");

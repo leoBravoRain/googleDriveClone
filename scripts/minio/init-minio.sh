@@ -29,8 +29,15 @@ docker exec $CONTAINER_NAME mc alias set myminio http://localhost:9000 minioadmi
 echo "📦 Creating bucket 'filedrive'..."
 docker exec $CONTAINER_NAME mc mb myminio/filedrive
 
-echo "🔐 Setting bucket policy for download access..."
-docker exec $CONTAINER_NAME mc anonymous set download myminio/filedrive
+echo "🔐 Applying custom access policy from JSON file..."
+# Copy the policy file to the container
+docker cp scripts/minio/access-policies.json $CONTAINER_NAME:/tmp/access-policies.json
+
+# Apply the policy from the JSON file
+docker exec $CONTAINER_NAME mc policy set myminio/filedrive /tmp/access-policies.json
+
+# Clean up the temporary file
+docker exec $CONTAINER_NAME rm /tmp/access-policies.json
 
 echo "✅ Verifying bucket was created..."
 docker exec $CONTAINER_NAME mc ls myminio

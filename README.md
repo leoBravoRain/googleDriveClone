@@ -56,10 +56,10 @@ After starting the services, create the MinIO bucket using the provided script:
 
 ```bash
 # Make script executable (if not already)
-chmod +x scripts/init-minio.sh
+chmod +x scripts/minio/init-minio.sh
 
 # Run the initialization script
-./scripts/init-minio.sh
+./scripts/minio/init-minio.sh
 ```
 
 ### 4. Verify Setup
