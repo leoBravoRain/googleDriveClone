@@ -39,34 +39,26 @@ git clone https://github.com/leoBravoRain/googleDriveClone
 cd googleDriveClone
 ```
 
-### 2. Start Services
-```bash
-docker compose up -d
-```
-
-This will start:
-- **Frontend**: http://localhost:5173 (SvelteKit)
-- **Backend**: http://localhost:8000 (FastAPI)
-- **MongoDB**: localhost:27017
-- **MinIO**: http://localhost:9000 (API) / http://localhost:9001 (Console)
-
-### 3. Setup MinIO Bucket (One-time setup)
-
-After starting the services, create the MinIO bucket using the provided script:
-
+### 2. Initialize the Project
 ```bash
 # Make script executable (if not already)
-chmod +x scripts/minio/init-minio.sh
+chmod +x scripts/init-project.sh
 
-# Run the initialization script
-./scripts/minio/init-minio.sh
+# Run the complete initialization
+./scripts/init-project.sh
 ```
 
-### 4. Verify Setup
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:8000/docs
+This script will automatically:
+1. Build and start all services (MinIO, MongoDB, Frontend, Backend)
+2. Initialize MinIO with access control policies
+3. Verify all services are running properly
+
+### 3. Access the Application
+Once initialization is complete, you can access:
+- **Frontend**: http://localhost:5173 (SvelteKit)
+- **Backend API**: http://localhost:8000/docs (FastAPI)
 - **MinIO Console**: http://localhost:9001
-- **MongoDB**: Use MongoDB Compass or similar tool
+- **MongoDB**: localhost:27017
 
 ## 🛠️ Development
 
@@ -115,7 +107,10 @@ googleDriveClone/
 ├── data/                     # Data persistence
 │   └── mongo-init/          # MongoDB initialization
 ├── scripts/                  # Utility scripts
-│   └── init-minio.sh        # MinIO bucket creation script
+│   ├── init-project.sh      # Complete project initialization
+│   └── minio/
+│       ├── init-minio.sh    # MinIO bucket creation script
+│       └── access-policy.json # MinIO access policy
 
 ├── docker-compose.yml        # Service orchestration
 └── README.md

@@ -7,7 +7,23 @@
                 "AWS": "*"
             },
             "Action": [
-                "s3:*"
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::filedrive",
+                "arn:aws:s3:::filedrive/*"
+            ]
+        },
+        {
+            "Effect": "Deny",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": [
+                "s3:DeleteObject",
+                "s3:DeleteBucket"
             ],
             "Resource": [
                 "arn:aws:s3:::filedrive",
