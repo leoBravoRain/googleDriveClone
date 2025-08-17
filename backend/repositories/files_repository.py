@@ -11,22 +11,50 @@ class FileRepository:
         self.database: Database = get_database()
         self.collection: Collection = self.database.files
         
-    def get_all_files(self) -> List[FileModel]:
+    def get_all_files(self, page: int = 1, limit: int = 10) -> dict:
         """
-        Get all files from database
+        Get all files from database with pagination
+        Args:
+            page: Page number (starts from 1)
+            limit: Number of files per page
+        Returns:
+            dict with files and pagination info
         """
         try:
-            # Find all files sorted by upload_date (newest first)
-            # TODO: manage pagination?
-            # TODO: fields to select are: name, size, upload date, file type
-            files = list(self.collection.find({}).sort("upload_date", -1))  # -1 for descending order
+            # Calculate skip value for pagination
+            skip = (page - 1) * limit
+            
+            # Get total count of files
+            total = self.collection.count_documents({})
+            
+            # Get paginated results with sorting
+            files = list(self.collection.find({})
+                         .sort("upload_date", -1)
+                         .skip(skip)
+                         .limit(limit))
             
             # Convert ObjectId to string for JSON serialization
-            # This becasue ObjectId is not serializable by default
             for file in files:
                 file["_id"] = str(file["_id"])
             
-            return files
+            # Calculate pagination info
+            total_pages = (total + limit - 1) // limit  # Ceiling division
+            has_next = page < total_pages
+            has_prev = page > 1
+            
+            return {
+                "files": files,
+                "pagination": {
+                    "current_page": page,
+                    "total_pages": total_pages,
+                    "total_files": total,
+                    "files_per_page": limit,
+                    "has_next": has_next,
+                    "has_prev": has_prev,
+                    "next_page": page + 1 if has_next else None,
+                    "prev_page": page - 1 if has_prev else None
+                }
+            }
             
         except Exception as e:
             print(f"Error getting all files: {e}")

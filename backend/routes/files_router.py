@@ -7,24 +7,32 @@ module_name = 'files'
 # tags is for swagger documentation
 router = APIRouter(prefix=f'/{module_name}', tags=[module_name])
 
-# # TODO: manage pagination?
 @router.get('/')
-async def get_files():
-    """Get all files"""
+async def get_files(page: int = 1, limit: int = 10):
+    """Get all files with pagination"""
     try:
-
-        # use service
-        files = FileService().get_all_files()
+        # Validate pagination parameters
+        if page < 1:
+            page = 1
+        if limit < 1 or limit > 100:
+            limit = 10  # Default limit
         
-        return {
-            "files": files,
-            "total": len(files)
-        }
+        # use service
+        result = FileService().get_all_files(page=page, limit=limit)
+        
+        return result
     except Exception as e:
         return {
             "error": f"Failed to fetch files: {str(e)}",
             "files": [],
-            "total": 0
+            "pagination": {
+                "current_page": page,
+                "total_pages": 0,
+                "total_files": 0,
+                "files_per_page": limit,
+                "has_next": False,
+                "has_prev": False
+            }
         } 
 
 @router.post('/')

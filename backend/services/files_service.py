@@ -14,8 +14,16 @@ class FileService:
         self.minio_client = get_minio_client()
         self.bucket_name = get_bucket_name()
 
-    def get_all_files(self) -> List[FileModel]:
-        return self.file_repository.get_all_files()
+    def get_all_files(self, page: int = 1, limit: int = 10) -> dict:
+        """
+        Get all files with pagination
+        Args:
+            page: Page number (starts from 1)
+            limit: Number of files per page
+        Returns:
+            dict with files and pagination info
+        """
+        return self.file_repository.get_all_files(page=page, limit=limit)
     
     # TODO: manage case when file was not uploaded to MinIO
     # TODO: change return type to normal response
