@@ -20,9 +20,6 @@ A full-stack Google Drive clone built with SvelteKit, FastAPI, MongoDB, and MinI
                        │   (File Storage)│
                        │                 │
                        │ - Actual files  │
-                       │ - Binary data   │
-                       │ - Images, docs  │
-                       │ - Videos, etc.  │
                        └─────────────────┘
 ```
 
@@ -62,56 +59,20 @@ Once initialization is complete, you can access:
 
 ## 🛠️ Development
 
-### Local Development (without Docker)
-```bash
-# Frontend
-cd frontend
-npm install
-npm run dev
-
-# Backend
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-### Docker Development
-```bash
-# Start all services
-docker compose up -d
-
-# View logs
-docker compose logs -f
-
-# Rebuild services
-docker compose build
-
-# Stop services
-docker compose down
-```
+The project includes hot-reloading for both frontend and backend, so you can develop and see changes immediately without restarting services. 
 
 ## 📁 Project Structure
 ```
 googleDriveClone/
 ├── frontend/                 # SvelteKit application
-│   ├── src/
-│   ├── Dockerfile
-│   └── package.json
 ├── backend/                  # FastAPI application
-│   ├── main.py
-│   ├── database.py
-│   ├── requirements.txt
-│   └── Dockerfile
 ├── data/                     # Data persistence
-│   └── mongo-init/          # MongoDB initialization
+│   └── mongo-init/           # MongoDB initialization
 ├── scripts/                  # Utility scripts
-│   ├── init-project.sh      # Complete project initialization
-│   └── minio/
-│       ├── init-minio.sh    # MinIO bucket creation script
+|    └── minio/
+│       ├── init-minio.sh     # MinIO bucket creation script
 │       └── access-policy.json # MinIO access policy
-
+│   ├── init-project.sh      # Complete project 
 ├── docker-compose.yml        # Service orchestration
 └── README.md
 ```
