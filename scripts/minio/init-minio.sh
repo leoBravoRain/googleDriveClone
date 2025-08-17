@@ -6,15 +6,15 @@
 echo "🚀 Starting MinIO bucket initialization..."
 
 # Check if MinIO container is running
-if ! docker compose ps | grep -q "minio.*Up"; then
+if ! docker compose -f docker-compose.dev.yml ps | grep -q "minio.*Up"; then
     echo "❌ MinIO service is not running. Starting MinIO..."
-    docker compose up -d minio
+    docker compose -f docker-compose.dev.yml up -d minio
     echo "⏳ Waiting for MinIO to be ready..."
     sleep 10
 fi
 
 # Get the container name
-CONTAINER_NAME=$(docker compose ps -q minio)
+CONTAINER_NAME=$(docker compose -f docker-compose.dev.yml ps -q minio)
 if [ -z "$CONTAINER_NAME" ]; then
     echo "❌ Could not find MinIO container!"
     exit 1

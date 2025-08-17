@@ -25,7 +25,7 @@ echo "📦 Step 1: Building and starting services..."
 echo "--------------------------------------------------"
 
 # Build and start MinIO MongoDB and Frontend
-docker compose up -d --build
+docker compose -f docker-compose.dev.yml up -d --build
 
 # Wait for services to be ready
 echo "⏳ Waiting for services to be ready..."
@@ -48,7 +48,7 @@ echo "🔧 Step 3: Restarting the backend..."
 echo "--------------------------------------------------"
 
 # Build and start the backend
-docker compose restart backend
+docker compose -f docker-compose.dev.yml restart backend
 
 # Wait for backend to be ready
 echo "⏳ Waiting for backend to be ready..."
@@ -61,7 +61,7 @@ echo "--------------------------------------------------"
 
 # Check if all services are running
 echo "🔍 Checking service status..."
-docker compose ps
+docker compose -f docker-compose.dev.yml ps
 
 # Test backend health
 echo ""

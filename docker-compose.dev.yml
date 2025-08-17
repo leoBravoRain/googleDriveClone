@@ -1,4 +1,5 @@
-# TODO: this is for dev. So create a prod version later.
+# Development Docker Compose configuration for Google Drive Clone
+
 services:
   # Frontend Service (SvelteKit)
   frontend:
@@ -43,11 +44,9 @@ services:
     restart: unless-stopped
 
   # MongoDB Service
-  # TODO: maybe create a separate Dockerfile for MongoDB?
   mongodb:
     image: mongo:7.0
     ports:
-    # TODO: Maybe remove, because this is to connect to the MongoDB container from the host machine.
       - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
@@ -65,9 +64,7 @@ services:
     image: minio/minio:latest
     ports:
       - "9000:9000"  # API port
-      # TODO: maybe this is just for dev?
       - "9001:9001"  # Web UI port
-    # TODO: do not expose these in prod.
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
