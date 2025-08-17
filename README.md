@@ -68,7 +68,95 @@ Once initialization is complete, you can access:
 
 ## 🛠️ Development
 
-The project includes hot-reloading for both frontend and backend, so you can develop and see changes immediately without restarting services. 
+The project includes hot-reloading for both frontend and backend, so you can develop and see changes immediately without restarting services.
+
+## 🌍 Multi-Environment Setup
+
+The project supports multiple environments (Development, QA, Production) with separate Docker Compose configurations:
+
+### Environment Files
+- `docker-compose.dev.yml` - Development environment with hot-reloading
+- `docker-compose.qa.yml` - QA/testing environment
+- `docker-compose.prod.yml` - Production environment
+- `.env.dev` - Development environment variables
+- `.env.qa` - QA environment variables  
+- `.env.prod` - Production environment variables
+
+### Environment-Specific Features
+
+#### Development (`docker-compose.dev.yml`)
+- ✅ **Hot-reloading** enabled for frontend and backend
+- ✅ **Volume mounts** for live code editing
+- ✅ **All ports exposed** for debugging
+- ✅ **MinIO console** accessible at http://localhost:9001
+- ✅ **MongoDB** accessible at localhost:27017
+
+#### QA (`docker-compose.qa.yml`)
+- 🔒 **Limited external access** for security
+- 📊 **Named volumes** for data persistence
+- 🧪 **Production-like** environment for testing
+
+#### Production (`docker-compose.prod.yml`)
+- 🚀 **Optimized builds** (no hot-reloading)
+- 🔒 **No volume mounts** (immutable containers)
+- 🛡️ **Minimal ports** exposed
+
+### Deployment Process
+
+#### 1. Development Workflow
+```bash
+# Start development environment
+./scripts/init-project.sh dev
+
+# Or manually
+docker compose -f docker-compose.dev.yml up -d --build
+```
+
+#### 2. QA Testing
+```bash
+# Deploy to QA environment
+docker compose -f docker-compose.qa.yml up -d --build
+
+# Run tests and validation
+# Access QA environment at configured ports
+```
+
+#### 3. Production Deployment
+```bash
+# Deploy to production
+docker compose -f docker-compose.prod.yml up -d --build
+
+# Monitor deployment
+docker compose -f docker-compose.prod.yml ps
+```
+
+### Environment Variables Management
+
+Each environment has its own `.env` file with specific configurations:
+
+```bash
+# Development
+cp .env.dev .env
+docker compose -f docker-compose.dev.yml up -d
+
+# QA
+cp .env.qa .env  
+docker compose -f docker-compose.qa.yml up -d
+
+# Production
+cp .env.prod .env
+docker compose -f docker-compose.prod.yml up -d
+```
+
+### Benefits of Multi-Environment Setup
+
+1. **Isolation**: Each environment is completely isolated
+2. **Security**: Production has minimal exposure
+3. **Testing**: QA mimics production closely
+4. **Development**: Dev has full debugging capabilities
+5. **Deployment**: Easy promotion between environments
+6. **Configuration**: Environment-specific settings
+7. **Volumes**: Separate data persistence per environment 
 
 ## 📁 Project Structure
 ```
@@ -79,13 +167,18 @@ googleDriveClone/
 │   ├── mongodb/              # MongoDB database files
 │   └── minio/                # MinIO object storage files
 ├── scripts/                  # Utility scripts
-│   └── mongo/           # MongoDB initialization
-|       ├── init.js      # Initialize DB
-|   └── minio/
-│       ├── init-minio.sh     # MinIO bucket creation script
-│       └── access-policy.json # MinIO access policy
-│   ├── init-project.sh      # Complete project 
-├── docker-compose.yml        # Service orchestration
+│   ├── mongo/                # MongoDB initialization
+│   │   └── init.js           # Initialize DB
+│   ├── minio/
+│   │   ├── init-minio.sh     # MinIO bucket creation script
+│   │   └── access-policy.json # MinIO access policy
+│   └── init-project.sh       # Complete project initialization
+├── docker-compose.dev.yml    # Development environment
+├── docker-compose.qa.yml     # QA environment
+├── docker-compose.prod.yml   # Production environment
+├── .env.dev                  # Development environment variables
+├── .env.qa                   # QA environment variables
+├── .env.prod                 # Production environment variables
 └── README.md
 ```
 
