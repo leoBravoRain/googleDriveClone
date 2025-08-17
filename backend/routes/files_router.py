@@ -36,12 +36,7 @@ async def upload_file(file: UploadFile = File(...)):
     
     # TODO: normalize response
     except Exception as e:
-        return {
-            "error": f"Failed to upload file: {str(e)}",
-            "file_id": None,
-            "filename": None,
-            "size": None
-        }
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{file_id}/download")
 async def download_file(file_id: str):
