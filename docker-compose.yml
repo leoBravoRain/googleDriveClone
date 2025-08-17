@@ -8,7 +8,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=${VITE_API_URL}
     # this is to hot-reload the frontend and avoid overwriting the node_modules folder
     volumes:
       - ./frontend:/app
@@ -27,12 +27,11 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - MONGODB_URL=mongodb://admin:password123@mongodb:27017/filedrive?authSource=admin
-      - MINIO_ENDPOINT=minio:9000
-      # TODO: move to .env file
-      - MINIO_ACCESS_KEY=access-user
-      - MINIO_SECRET_KEY=access-password
-      - MINIO_BUCKET_NAME=filedrive
+      - MONGODB_URL=${MONGODB_URL}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
     # this is to hot-reloading
     volumes:
       - ./backend:/app
@@ -51,10 +50,9 @@ services:
     # TODO: Maybe remove, because this is to connect to the MongoDB container from the host machine.
       - "27017:27017"
     environment:
-      # TODO: hide these in .env file
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password123
-      - MONGO_INITDB_DATABASE=filedrive
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     volumes:
       - ./data/mongodb:/data/db
       - ./scripts/mongodb:/docker-entrypoint-initdb.d
@@ -71,8 +69,8 @@ services:
       - "9001:9001"  # Web UI port
     # TODO: do not expose these in prod.
     environment:
-      - MINIO_ROOT_USER=minioadmin
-      - MINIO_ROOT_PASSWORD=minioadmin123
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     volumes:
       - ./data/minio:/data
     command: server /data --console-address ":9001"

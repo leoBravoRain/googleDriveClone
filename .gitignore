@@ -4,3 +4,8 @@ data/minio/
 
 # Keep the mongo-init folder (contains initialization scripts)
 !data/mongo-init/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
