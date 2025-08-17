@@ -8,7 +8,18 @@ set -e  # Exit on any error
 echo "🚀 Starting Google Drive Clone Project Initialization..."
 echo "=================================================="
 
-# Step 1: Build and start services (excluding backend)
+# Step 0: Create data directories
+echo ""
+echo "📁 Step 0: Creating data directories..."
+echo "--------------------------------------------------"
+
+# Create data directories if they don't exist
+mkdir -p data/mongodb data/minio
+echo "✅ Created data directories:"
+echo "   - data/mongodb/ (MongoDB database files)"
+echo "   - data/minio/ (MinIO object storage files)"
+
+# Step 1: Build and start services
 echo ""
 echo "📦 Step 1: Building and starting services..."
 echo "--------------------------------------------------"
