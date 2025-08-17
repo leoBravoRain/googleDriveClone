@@ -36,7 +36,16 @@ git clone https://github.com/leoBravoRain/googleDriveClone
 cd googleDriveClone
 ```
 
-### 2. Initialize the Project
+### 2. Setup Environment Variables
+```bash
+# Copy the environment variables template
+cp .env.example .env
+
+# Edit .env file with your preferred credentials
+# (Optional: Change default passwords for security)
+```
+
+### 3. Initialize the Project
 ```bash
 # Make script executable (if not already)
 chmod +x scripts/init-project.sh
@@ -50,7 +59,7 @@ This script will automatically:
 2. Initialize MinIO with access control policies
 3. Verify all services are running properly
 
-### 3. Access the Application
+### 4. Access the Application
 Once initialization is complete, you can access:
 - **Frontend**: http://localhost:5173 (SvelteKit)
 - **Backend API**: http://localhost:8000/docs (FastAPI)
