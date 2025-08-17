@@ -16,10 +16,10 @@ class FileRepository:
         Get all files from database
         """
         try:
-            # Find all files (synchronous operation with PyMongo)
+            # Find all files sorted by upload_date (newest first)
             # TODO: manage pagination?
             # TODO: fields to select are: name, size, upload date, file type
-            files = list(self.collection.find({}))  # Limit to 100 files
+            files = list(self.collection.find({}).sort("upload_date", -1))  # -1 for descending order
             
             # Convert ObjectId to string for JSON serialization
             # This becasue ObjectId is not serializable by default
