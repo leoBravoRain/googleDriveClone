@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	import type { FileData } from '$lib/types/files.types';
+	import type { FileData, PaginationInfo } from '$lib/types/files.types';
 
 	import { FileService } from '$lib/services/files.service';
+	
 	import { formatDate, formatFileSize } from '$lib/utils/formatters.utils';
 	
 	// State variables
@@ -13,6 +14,11 @@
 	let fileInput: FileList | null = null;
 	let editingFileId: string | null = null;
 	let editingFileName: string = '';
+	
+	// Pagination state
+	let currentPage = 1;
+	let filesPerPage = 5;
+	let pagination: PaginationInfo | null = null;
 
 	// Get file icon based on type
 	function getFileIcon(fileType: string): string {
@@ -26,11 +32,14 @@
 	}
 	
 
-	async function fetchFiles() {
+	async function fetchFiles(page: number = currentPage) {
 		try {
 			loading = true;
 			error = '';
-			files = await FileService.getFiles();
+			const response = await FileService.getFiles(page, filesPerPage);
+			files = response.files;
+			pagination = response.pagination;
+			currentPage = page;
 		}
 		catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to load files';
@@ -115,6 +124,25 @@
 			saveEdit();
 		} else if (event.key === 'Escape') {
 			cancelEdit();
+		}
+	}
+	
+	// Pagination functions
+	async function goToPage(page: number) {
+		if (page >= 1 && pagination && page <= pagination.total_pages) {
+			await fetchFiles(page);
+		}
+	}
+	
+	async function nextPage() {
+		if (pagination && pagination.has_next) {
+			await fetchFiles(currentPage + 1);
+		}
+	}
+	
+	async function prevPage() {
+		if (pagination && pagination.has_prev) {
+			await fetchFiles(currentPage - 1);
 		}
 	}
 </script>
@@ -243,6 +271,50 @@
 						</table>
 					</div>
 				</div>
+				
+				<!-- Pagination -->
+				{#if pagination && pagination.total_pages > 1}
+					<div class="bg-white rounded-lg shadow-sm border p-4 mt-4">
+						<div class="flex items-center justify-between">
+							<div class="text-sm text-gray-700">
+								Showing page {pagination.current_page} of {pagination.total_pages} 
+								({pagination.total_files} total files)
+							</div>
+							<div class="flex items-center space-x-2">
+								<button 
+									onclick={prevPage}
+									disabled={!pagination.has_prev}
+									class="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+								>
+									Previous
+								</button>
+								
+								<!-- Page numbers -->
+								<div class="flex items-center space-x-1">
+									{#each Array.from({length: Math.min(5, pagination.total_pages)}, (_, i) => {
+										const pageNum = i + 1;
+										return pageNum;
+									}) as pageNum}
+										<button 
+											onclick={() => goToPage(pageNum)}
+											class="px-3 py-1 text-sm rounded transition-colors cursor-pointer {pageNum === pagination.current_page ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
+										>
+											{pageNum}
+										</button>
+									{/each}
+								</div>
+								
+								<button 
+									onclick={nextPage}
+									disabled={!pagination.has_next}
+									class="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+								>
+									Next
+								</button>
+							</div>
+						</div>
+					</div>
+				{/if}
 			{/if}
 		{/if}
 	</div>
