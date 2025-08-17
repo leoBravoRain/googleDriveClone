@@ -1,0 +1,84 @@
+# QA Docker Compose configuration for Google Drive Clone
+
+services:
+  # Frontend Service (SvelteKit)
+  frontend:
+    build: 
+      context: ./frontend
+      # TODO: this should point to a Dockerfile.qa optimized for qa.
+      dockerfile: Dockerfile
+    ports:
+      - "80:5173"  # Standard HTTP port
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
+      - NODE_ENV=qa
+    volumes: []  # No volume mounts in qa
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Backend Service (FastAPI)
+  backend:
+    build: 
+      context: ./backend
+      # TODO: this should point to a Dockerfile.qa optimized for qa.
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=${MONGODB_URL}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
+      - ENVIRONMENT=qa
+      - DEBUG=false
+    volumes: []  # No volume mounts in qa
+    depends_on:
+      - mongodb
+      - minio
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # MongoDB Service
+  mongodb:
+    image: mongo:7.0
+    ports: []  # No external access in qa
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_ROOT_DATABASE=${MONGO_INITDB_ROOT_DATABASE}
+    volumes:
+      - qa_mongodb_data:/data/db
+      - ./data/mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # MinIO Service (Object Storage)
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"  # Only API port, no console in qa
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+    volumes:
+      - qa_minio_data:/data
+    command: server /data
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  qa_mongodb_data:
+    driver: local
+  qa_minio_data:
+    driver: local
