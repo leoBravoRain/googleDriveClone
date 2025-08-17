@@ -56,8 +56,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password123
       - MONGO_INITDB_DATABASE=filedrive
     volumes:
-      - mongodb_data:/data/db
-      - ./data/mongo-init:/docker-entrypoint-initdb.d
+      - ./data/mongodb:/data/db
+      - ./scripts/mongodb:/docker-entrypoint-initdb.d
     networks:
       - app-network
     restart: unless-stopped
@@ -74,7 +74,7 @@ services:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin123
     volumes:
-      - minio_data:/data
+      - ./data/minio:/data
     command: server /data --console-address ":9001"
     networks:
       - app-network
@@ -83,7 +83,3 @@ services:
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  mongodb_data:
-  minio_data:

@@ -1,0 +1,6 @@
+# Data persistence folders
+data/mongodb/
+data/minio/
+
+# Keep the mongo-init folder (contains initialization scripts)
+!data/mongo-init/

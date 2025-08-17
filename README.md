@@ -67,9 +67,12 @@ googleDriveClone/
 ├── frontend/                 # SvelteKit application
 ├── backend/                  # FastAPI application
 ├── data/                     # Data persistence
-│   └── mongo-init/           # MongoDB initialization
+│   ├── mongodb/              # MongoDB database files
+│   └── minio/                # MinIO object storage files
 ├── scripts/                  # Utility scripts
-|    └── minio/
+│   └── mongo/           # MongoDB initialization
+|       ├── init.js      # Initialize DB
+|   └── minio/
 │       ├── init-minio.sh     # MinIO bucket creation script
 │       └── access-policy.json # MinIO access policy
 │   ├── init-project.sh      # Complete project 
