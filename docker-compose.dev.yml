@@ -50,6 +50,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8001:8000"
+    environment:
+      - MONGODB_URL=${MONGODB_URL}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
     volumes:
       - ./api-django-drf:/app
     depends_on:
