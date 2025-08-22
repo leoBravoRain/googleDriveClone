@@ -1,0 +1,32 @@
+name: Django DRF API - SonarCloud Analysis
+
+on: 
+  push:
+    branches: 
+      - dev
+      - main
+    paths:
+      - 'api-django-drf/**'
+  pull_request:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'api-django-drf/**'
+
+jobs:
+  sonarCloud:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout repo
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 5. Run SonarCloud scan
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectKey: leoBravoRain_googleDriveClone
+          organization: leobravorain
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
