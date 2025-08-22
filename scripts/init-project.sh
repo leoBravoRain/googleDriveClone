@@ -25,7 +25,7 @@ echo "📦 Step 1: Building and starting services..."
 echo "--------------------------------------------------"
 
 # Build and start MinIO MongoDB and Frontend
-docker compose -f docker-compose.dev.yml up -d --build
+docker compose -f docker-compose.dev.yml up --build
 
 # Wait for services to be ready
 echo "⏳ Waiting for services to be ready..."
