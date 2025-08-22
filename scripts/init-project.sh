@@ -74,3 +74,14 @@ fi
 
 # Step 5: Final status
 echo "✅ Initialization completed successfully!"
+
+# TODO: add here all the urls to the services
+echo "🔗 URLs to the services:"
+echo "   - MinIO: http://localhost:9000"
+echo "   - MongoDB: http://localhost:27017"
+echo "   - FastAPI: http://localhost:8000"
+echo "   - Django: http://localhost:8001"
+echo "   - Frontend: http://localhost:5173"
+
+# TODO: add here all the urls to the services
+
