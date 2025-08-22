@@ -52,6 +52,8 @@ services:
       - "8001:8000"
     volumes:
       - ./api-django-drf:/app
+    depends_on:
+      - mongodb
     networks:
       - app-network
     restart: unless-stopped
