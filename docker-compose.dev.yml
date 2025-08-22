@@ -43,6 +43,19 @@ services:
       - app-network
     restart: unless-stopped
 
+  # Django Service (Django-DRF)
+  api-django-drf:
+    build:
+      context: ./api-django-drf
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./api-django-drf:/app
+    networks:
+      - app-network
+    restart: unless-stopped
+
   # MongoDB Service
   mongodb:
     image: mongo:7.0
