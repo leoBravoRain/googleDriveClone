@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / compiled files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# Virtual environment
+venv/
+env/
+.env/
+
+# IDE and Editor Files
+.idea/
+.vscode/
+*.swp
+*.bak
+*.swo
+
+# Database files
+*.sqlite3
+db.sqlite3
+
+# Media and Static Files
+media/
+static_collected/
+staticfiles/
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+
+# Configuration files (sensitive)
+.env
+local_settings.py
+
+# Pipenv files (if used)
+Pipfile.lock
+
+# Poetry files (if used)
+poetry.lock
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Other
+manage.pyc
