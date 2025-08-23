@@ -148,3 +148,31 @@ The application uses the following environment variables (configured in docker-c
 ## 📚 Documentation
 
 - [API Documentation](http://localhost:8000/docs) - FastAPI auto-generated docs
+
+## 🔍 Code Quality & CI/CD
+
+### Pre-commit Hooks
+
+The project has pre-commits hooks: Automated code quality checks that run before each commit.
+
+#### Setup
+```bash
+# Install pre-commit
+pip install pre-commit
+# or
+brew install pre-commit
+
+# Install hooks
+pre-commit install
+pre-commit install --hook-type commit-msg
+
+# Or use setup script
+chmod +x scripts/setup-pre-commit.sh
+./scripts/setup-pre-commit.sh
+```
+
+These hooks runs automatically when doing a commit.
+
+### GitHub Actions & SonarCloud
+
+CI/CD example with code quality analysis done by SonarCube.
