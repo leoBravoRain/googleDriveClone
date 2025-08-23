@@ -4,9 +4,9 @@
 	import type { FileData, PaginationInfo } from '$lib/types/files.types';
 
 	import { FileService } from '$lib/services/files.service';
-	
+
 	import { formatDate, formatFileSize } from '$lib/utils/formatters.utils';
-	
+
 	// State variables
 	let files: FileData[] = [];
 	let loading = true;
@@ -14,7 +14,7 @@
 	let fileInput: FileList | null = null;
 	let editingFileId: string | null = null;
 	let editingFileName: string = '';
-	
+
 	// Pagination state
 	let currentPage = 1;
 	let filesPerPage = 5;
@@ -30,7 +30,7 @@
 		if (fileType.includes('zip') || fileType.includes('rar')) return '📦';
 		return '📁';
 	}
-	
+
 
 	async function fetchFiles(page: number = currentPage) {
 		try {
@@ -126,20 +126,20 @@
 			cancelEdit();
 		}
 	}
-	
+
 	// Pagination functions
 	async function goToPage(page: number) {
 		if (page >= 1 && pagination && page <= pagination.total_pages) {
 			await fetchFiles(page);
 		}
 	}
-	
+
 	async function nextPage() {
 		if (pagination && pagination.has_next) {
 			await fetchFiles(currentPage + 1);
 		}
 	}
-	
+
 	async function prevPage() {
 		if (pagination && pagination.has_prev) {
 			await fetchFiles(currentPage - 1);
@@ -150,7 +150,7 @@
 <div class="min-h-screen bg-gray-50 p-4">
 	<div class="max-w-6xl mx-auto">
 		<h1 class="text-3xl font-bold text-gray-800 mb-8">Google Drive Clone</h1>
-		
+
 		<!-- Loading state -->
 		{#if loading}
 			<div class="flex justify-center items-center py-12">
@@ -165,15 +165,15 @@
 			<div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
 				<label for="fileInput" class="block text-sm font-medium text-gray-700 mb-2">Upload File</label>
 				<div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-					<input 
-						type="file" 
-						bind:files={fileInput} 
-						id="fileInput" 
-						name="fileInput" 
+					<input
+						type="file"
+						bind:files={fileInput}
+						id="fileInput"
+						name="fileInput"
 						accept="image/*, video/*, audio/*, .pdf, .txt, .zip, .rar"
 						class="w-full sm:flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
 					/>
-					<button 
+					<button
 						onclick={handleUpload}
 						disabled={loading || !fileInput || fileInput.length === 0}
 						class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 cursor-pointer"
@@ -209,20 +209,20 @@
 												<span class="text-xl mr-3">{getFileIcon(file.file_type)}</span>
 												{#if editingFileId === file.file_id}
 													<div class="flex items-center gap-2">
-														<input 
-															type="text" 
+														<input
+															type="text"
 															bind:value={editingFileName}
 															onkeydown={handleKeyPress}
 															autofocus
 															class="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 														/>
-														<button 
+														<button
 															onclick={saveEdit}
 															class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 cursor-pointer"
 														>
 															Save
 														</button>
-														<button 
+														<button
 															onclick={cancelEdit}
 															class="px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 cursor-pointer"
 														>
@@ -245,19 +245,19 @@
 										</td>
 										<td class="px-6 py-4 whitespace-nowrap text-sm">
 											<div class="flex gap-2">
-												<button 
+												<button
 													onclick={() => handleDownload(file.file_id, file.filename)}
 													class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors cursor-pointer"
 												>
 													Download
 												</button>
-												<button 
+												<button
 													onclick={() => startEdit(file.file_id, file.filename)}
 													class="px-3 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700 transition-colors cursor-pointer"
 												>
 													Rename
 												</button>
-												<button 
+												<button
 													onclick={() => handleDelete(file.file_id)}
 													class="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors cursor-pointer"
 												>
@@ -271,31 +271,31 @@
 						</table>
 					</div>
 				</div>
-				
+
 				<!-- Pagination -->
 				{#if pagination && pagination.total_pages > 1}
 					<div class="bg-white rounded-lg shadow-sm border p-4 mt-4">
 						<div class="flex items-center justify-between">
 							<div class="text-sm text-gray-700">
-								Showing page {pagination.current_page} of {pagination.total_pages} 
+								Showing page {pagination.current_page} of {pagination.total_pages}
 								({pagination.total_files} total files)
 							</div>
 							<div class="flex items-center space-x-2">
-								<button 
+								<button
 									onclick={prevPage}
 									disabled={!pagination.has_prev}
 									class="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
 								>
 									Previous
 								</button>
-								
+
 								<!-- Page numbers -->
 								<div class="flex items-center space-x-1">
 									{#each Array.from({length: Math.min(5, pagination.total_pages)}, (_, i) => {
 										const pageNum = i + 1;
 										return pageNum;
 									}) as pageNum}
-										<button 
+										<button
 											onclick={() => goToPage(pageNum)}
 											class="px-3 py-1 text-sm rounded transition-colors cursor-pointer {pageNum === pagination.current_page ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
 										>
@@ -303,8 +303,8 @@
 										</button>
 									{/each}
 								</div>
-								
-								<button 
+
+								<button
 									onclick={nextPage}
 									disabled={!pagination.has_next}
 									class="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"

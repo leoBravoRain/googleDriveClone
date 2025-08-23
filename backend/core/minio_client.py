@@ -16,7 +16,7 @@ def connect_to_minio():
     minio_endpoint = os.getenv("MINIO_ENDPOINT", "minio:9000")
     minio_access_key = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
     minio_secret_key = os.getenv("MINIO_SECRET_KEY", "minioadmin123")
-    
+
     # Create MinIO client
     minio_manager.client = Minio(
         endpoint=minio_endpoint,
@@ -24,14 +24,14 @@ def connect_to_minio():
         secret_key=minio_secret_key,
         secure=False  # Set to True if using HTTPS
     )
-    
+
     # Test the connection
     try:
         # List buckets to test connection
         buckets = minio_manager.client.list_buckets()
         print("✅ Successfully connected to MinIO!")
         print(f"✅ Available buckets: {[bucket.name for bucket in buckets]}")
-        
+
     except Exception as e:
         print(f"❌ Failed to connect to MinIO: {e}")
         raise e

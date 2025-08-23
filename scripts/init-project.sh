@@ -84,4 +84,3 @@ echo "   - Django: http://localhost:8001"
 echo "   - Frontend: http://localhost:5173"
 
 # TODO: add here all the urls to the services
-

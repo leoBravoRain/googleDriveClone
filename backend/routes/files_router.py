@@ -16,10 +16,10 @@ async def get_files(page: int = 1, limit: int = 10):
             page = 1
         if limit < 1 or limit > 100:
             limit = 10  # Default limit
-        
+
         # use service
         result = FileService().get_all_files(page=page, limit=limit)
-        
+
         return result
     except Exception as e:
         return {
@@ -33,7 +33,7 @@ async def get_files(page: int = 1, limit: int = 10):
                 "has_next": False,
                 "has_prev": False
             }
-        } 
+        }
 
 @router.post('/')
 async def upload_file(file: UploadFile = File(...)):
@@ -41,7 +41,7 @@ async def upload_file(file: UploadFile = File(...)):
     try:
         response = await FileService().upload_file(file)
         return response
-    
+
     # TODO: normalize response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -52,7 +52,7 @@ async def download_file(file_id: str):
     try:
         file_service = FileService()
         file_data = file_service.download_file(file_id)
-        
+
         # Create streaming response
         return StreamingResponse(
             io.BytesIO(file_data["data"]),
@@ -62,7 +62,7 @@ async def download_file(file_id: str):
                 "Content-Length": str(file_data["size"])
             }
         )
-        
+
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
@@ -75,7 +75,7 @@ async def delete_file(file_id: str):
         file_service = FileService()
         result = file_service.delete_file(file_id)
         return result
-        
+
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
@@ -88,7 +88,7 @@ async def update_file(file_id: str, file_name: str):
         file_service = FileService()
         result = file_service.update_file_name(file_id, file_name)
         return result
-        
+
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except FileNotFoundError as e:

@@ -3,7 +3,7 @@
 services:
   # Frontend Service (SvelteKit)
   frontend:
-    build: 
+    build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
@@ -22,7 +22,7 @@ services:
 
   # Backend Service (FastAPI)
   backend:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     ports:

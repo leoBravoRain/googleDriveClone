@@ -79,7 +79,7 @@ The project supports multiple environments (Development, QA, Production) with se
 - `docker-compose.qa.yml` - QA/testing environment
 - `docker-compose.prod.yml` - Production environment
 - `.env.dev` - Development environment variables
-- `.env.qa` - QA environment variables  
+- `.env.qa` - QA environment variables
 - `.env.prod` - Production environment variables
 
 ### Environment-Specific Features

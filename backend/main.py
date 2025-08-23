@@ -35,7 +35,7 @@ def shutdown_db_client():
     """Close MongoDB connection on shutdown"""
     close_mongo_connection()
     close_minio_connection()
-    
+
 @app.get("/")
 async def root():
     """Root endpoint - health check"""

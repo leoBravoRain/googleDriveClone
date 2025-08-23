@@ -17,7 +17,6 @@ class File(Document):
         'collection': 'files',
         'ordering': ['-created_at']
     }
-    
+
     def __str__(self):
         return f"{self.filename} ({self.file_type})"
-    

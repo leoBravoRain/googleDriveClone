@@ -3,7 +3,7 @@
 services:
   # Frontend Service (SvelteKit)
   frontend:
-    build: 
+    build:
       context: ./frontend
       # TODO: this should point to a Dockerfile.prod optimized for production.
       dockerfile: Dockerfile
@@ -21,7 +21,7 @@ services:
 
   # Backend Service (FastAPI)
   backend:
-    build: 
+    build:
       context: ./backend
       # TODO: this should point to a Dockerfile.prod optimized for production.
       dockerfile: Dockerfile

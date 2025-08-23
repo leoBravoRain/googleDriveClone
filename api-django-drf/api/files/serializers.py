@@ -13,7 +13,7 @@ class FileSerializer(serializers.Serializer):
     user_id = serializers.CharField(required=False, allow_blank=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
-    
+
     def to_representation(self, instance):
         """Convert mongoengine object to dictionary"""
         return {
@@ -28,5 +28,3 @@ class FileSerializer(serializers.Serializer):
             'created_at': instance.created_at.isoformat() if instance.created_at else None,
             'updated_at': instance.updated_at.isoformat() if instance.updated_at else None,
         }
-    
-    
