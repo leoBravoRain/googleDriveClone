@@ -31,7 +31,6 @@
 		return '📁';
 	}
 
-
 	async function fetchFiles(page: number = currentPage) {
 		try {
 			loading = true;
@@ -40,17 +39,15 @@
 			files = response.files;
 			pagination = response.pagination;
 			currentPage = page;
-		}
-		catch (err) {
+		} catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to load files';
 			console.error('Error loading files:', err);
-		}
-		finally {
+		} finally {
 			loading = false;
 		}
 	}
 
-	onMount(async() => {
+	onMount(async () => {
 		await fetchFiles();
 	});
 
@@ -148,35 +145,37 @@
 </script>
 
 <div class="min-h-screen bg-gray-50 p-4">
-	<div class="max-w-6xl mx-auto">
-		<h1 class="text-3xl font-bold text-gray-800 mb-8">Google Drive Clone</h1>
+	<div class="mx-auto max-w-6xl">
+		<h1 class="mb-8 text-3xl font-bold text-gray-800">Google Drive Clone</h1>
 
 		<!-- Loading state -->
 		{#if loading}
-			<div class="flex justify-center items-center py-12">
+			<div class="flex items-center justify-center py-12">
 				<div class="text-gray-600">Loading files...</div>
 			</div>
 		{:else if error}
-			<div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+			<div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
 				<p class="text-red-700">{error}</p>
 			</div>
 		{:else}
 			<!-- Upload section -->
-			<div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
-				<label for="fileInput" class="block text-sm font-medium text-gray-700 mb-2">Upload File</label>
-				<div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+			<div class="mb-6 rounded-lg border bg-white p-6 shadow-sm">
+				<label for="fileInput" class="mb-2 block text-sm font-medium text-gray-700"
+					>Upload File</label
+				>
+				<div class="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
 					<input
 						type="file"
 						bind:files={fileInput}
 						id="fileInput"
 						name="fileInput"
 						accept="image/*, video/*, audio/*, .pdf, .txt, .zip, .rar"
-						class="w-full sm:flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+						class="w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100 sm:flex-1"
 					/>
 					<button
 						onclick={handleUpload}
 						disabled={loading || !fileInput || fileInput.length === 0}
-						class="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 cursor-pointer"
+						class="w-full cursor-pointer rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:hover:bg-gray-400 sm:w-auto"
 					>
 						Upload
 					</button>
@@ -185,28 +184,43 @@
 
 			<!-- File list -->
 			{#if files.length === 0}
-				<div class="bg-white rounded-lg shadow-sm border p-12 text-center">
+				<div class="rounded-lg border bg-white p-12 text-center shadow-sm">
 					<p class="text-gray-500">No files found. Upload some files to get started!</p>
 				</div>
 			{:else}
-				<div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+				<div class="overflow-hidden rounded-lg border bg-white shadow-sm">
 					<div class="overflow-x-auto">
 						<table class="w-full">
 							<thead class="bg-gray-50">
 								<tr>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Upload Date</th>
-									<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+									<th
+										class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>File</th
+									>
+									<th
+										class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>Size</th
+									>
+									<th
+										class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>Type</th
+									>
+									<th
+										class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>Upload Date</th
+									>
+									<th
+										class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+										>Actions</th
+									>
 								</tr>
 							</thead>
-							<tbody class="bg-white divide-y divide-gray-200">
+							<tbody class="divide-y divide-gray-200 bg-white">
 								{#each files as file}
 									<tr class="hover:bg-gray-50">
 										<td class="px-6 py-4 whitespace-nowrap">
 											<div class="flex items-center">
-												<span class="text-xl mr-3">{getFileIcon(file.file_type)}</span>
+												<span class="mr-3 text-xl">{getFileIcon(file.file_type)}</span>
 												{#if editingFileId === file.file_id}
 													<div class="flex items-center gap-2">
 														<input
@@ -214,17 +228,17 @@
 															bind:value={editingFileName}
 															onkeydown={handleKeyPress}
 															autofocus
-															class="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+															class="rounded border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
 														/>
 														<button
 															onclick={saveEdit}
-															class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 cursor-pointer"
+															class="cursor-pointer rounded bg-green-600 px-2 py-1 text-xs text-white hover:bg-green-700"
 														>
 															Save
 														</button>
 														<button
 															onclick={cancelEdit}
-															class="px-2 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 cursor-pointer"
+															class="cursor-pointer rounded bg-gray-600 px-2 py-1 text-xs text-white hover:bg-gray-700"
 														>
 															Cancel
 														</button>
@@ -234,32 +248,32 @@
 												{/if}
 											</div>
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+										<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
 											{formatFileSize(file.size)}
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+										<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
 											{file.file_type}
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+										<td class="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
 											{formatDate(file.upload_date)}
 										</td>
-										<td class="px-6 py-4 whitespace-nowrap text-sm">
+										<td class="px-6 py-4 text-sm whitespace-nowrap">
 											<div class="flex gap-2">
 												<button
 													onclick={() => handleDownload(file.file_id, file.filename)}
-													class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors cursor-pointer"
+													class="cursor-pointer rounded bg-blue-600 px-3 py-1 text-xs text-white transition-colors hover:bg-blue-700"
 												>
 													Download
 												</button>
 												<button
 													onclick={() => startEdit(file.file_id, file.filename)}
-													class="px-3 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700 transition-colors cursor-pointer"
+													class="cursor-pointer rounded bg-yellow-600 px-3 py-1 text-xs text-white transition-colors hover:bg-yellow-700"
 												>
 													Rename
 												</button>
 												<button
 													onclick={() => handleDelete(file.file_id)}
-													class="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors cursor-pointer"
+													class="cursor-pointer rounded bg-red-600 px-3 py-1 text-xs text-white transition-colors hover:bg-red-700"
 												>
 													Delete
 												</button>
@@ -274,7 +288,7 @@
 
 				<!-- Pagination -->
 				{#if pagination && pagination.total_pages > 1}
-					<div class="bg-white rounded-lg shadow-sm border p-4 mt-4">
+					<div class="mt-4 rounded-lg border bg-white p-4 shadow-sm">
 						<div class="flex items-center justify-between">
 							<div class="text-sm text-gray-700">
 								Showing page {pagination.current_page} of {pagination.total_pages}
@@ -284,20 +298,23 @@
 								<button
 									onclick={prevPage}
 									disabled={!pagination.has_prev}
-									class="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+									class="cursor-pointer rounded bg-gray-600 px-3 py-1 text-sm text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-400"
 								>
 									Previous
 								</button>
 
 								<!-- Page numbers -->
 								<div class="flex items-center space-x-1">
-									{#each Array.from({length: Math.min(5, pagination.total_pages)}, (_, i) => {
+									{#each Array.from({ length: Math.min(5, pagination.total_pages) }, (_, i) => {
 										const pageNum = i + 1;
 										return pageNum;
 									}) as pageNum}
 										<button
 											onclick={() => goToPage(pageNum)}
-											class="px-3 py-1 text-sm rounded transition-colors cursor-pointer {pageNum === pagination.current_page ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
+											class="cursor-pointer rounded px-3 py-1 text-sm transition-colors {pageNum ===
+											pagination.current_page
+												? 'bg-blue-600 text-white'
+												: 'bg-gray-200 text-gray-700 hover:bg-gray-300'}"
 										>
 											{pageNum}
 										</button>
@@ -307,7 +324,7 @@
 								<button
 									onclick={nextPage}
 									disabled={!pagination.has_next}
-									class="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+									class="cursor-pointer rounded bg-gray-600 px-3 py-1 text-sm text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:bg-gray-400"
 								>
 									Next
 								</button>
