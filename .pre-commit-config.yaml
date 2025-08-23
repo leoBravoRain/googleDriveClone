@@ -65,18 +65,18 @@ repos:
         always_run: true
         files: ^frontend/
 
-  # # TypeScript type checking
-  # - repo: local
-  #   hooks:
-  #     - id: typescript-check
-  #       name: "TypeScript - Type check"
-  #       description: "Run TypeScript type checking"
-  #       entry: npm run check
-  #       language: system
-  #       pass_filenames: false
-  #       always_run: true
-  #       files: \.(ts|tsx|svelte)$
-  #       stages: [commit]
+  # TypeScript type checking
+  - repo: local
+    hooks:
+      - id: typescript-check
+        name: "TypeScript - Type check"
+        description: "Run TypeScript type checking"
+        entry: bash -c 'cd frontend && npm run check'
+        language: system
+        pass_filenames: false
+        always_run: true
+        files: \.(ts|tsx|svelte)$
+        stages: [commit]
 
   # # SvelteKit sync and check
   # - repo: local
