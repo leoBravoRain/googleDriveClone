@@ -53,24 +53,17 @@ repos:
         always_run: true
         files: ^frontend/
 
-  # # ESLint for JavaScript/TypeScript linting
-  # - repo: https://github.com/pre-commit/mirrors-eslint
-  #   rev: v9.18.0
-  #   hooks:
-  #     - id: eslint
-  #       name: "ESLint - Lint JavaScript/TypeScript files"
-  #       description: "Lint JavaScript and TypeScript files with ESLint"
-  #       files: \.(js|jsx|ts|tsx|svelte)$
-  #       types: [file]
-  #       additional_dependencies:
-  #         - eslint@9.18.0
-  #         - eslint-config-prettier@10.0.1
-  #         - eslint-plugin-svelte@3.0.0
-  #         - typescript-eslint@8.20.0
-  #         - @eslint/js@9.18.0
-  #         - @eslint/compat@1.2.5
-  #         - globals@16.0.0
-  #       args: [--fix]
+  # ESLint for JavaScript/TypeScript linting (local hook)
+  - repo: local
+    hooks:
+      - id: eslint
+        name: "ESLint - Lint JavaScript/TypeScript files"
+        description: "Lint JavaScript and TypeScript files with ESLint"
+        entry: bash -c 'cd frontend && npm run lint'
+        language: system
+        pass_filenames: false
+        always_run: true
+        files: ^frontend/
 
   # # TypeScript type checking
   # - repo: local

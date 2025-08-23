@@ -55,7 +55,7 @@
 		if (!fileInput || fileInput.length === 0) return;
 		const file = fileInput[0];
 		try {
-			const uploadedFile = await FileService.uploadFile(file);
+			await FileService.uploadFile(file);
 			// Clear the form after successful upload
 			fileInput = null;
 			// reload files
@@ -216,7 +216,7 @@
 								</tr>
 							</thead>
 							<tbody class="divide-y divide-gray-200 bg-white">
-								{#each files as file}
+								{#each files as file (file.file_id)}
 									<tr class="hover:bg-gray-50">
 										<td class="px-6 py-4 whitespace-nowrap">
 											<div class="flex items-center">
@@ -308,7 +308,7 @@
 									{#each Array.from({ length: Math.min(5, pagination.total_pages) }, (_, i) => {
 										const pageNum = i + 1;
 										return pageNum;
-									}) as pageNum}
+									}) as pageNum (pageNum)}
 										<button
 											onclick={() => goToPage(pageNum)}
 											class="cursor-pointer rounded px-3 py-1 text-sm transition-colors {pageNum ===
