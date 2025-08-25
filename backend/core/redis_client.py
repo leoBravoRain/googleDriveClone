@@ -23,30 +23,6 @@ class RedisClient:
             logger.error(f"Failed to connect to Redis: {e}")
             self.redis = None
 
-    def set_cache(self, key: str, value: Any, expire: int = 3600) -> bool:
-        """
-        Set cache with expiration (default 1 hour)
-        Args:
-            key: Cache key
-            value: Value to cache (will be JSON serialized)
-            expire: Expiration time in seconds
-        Returns:
-            bool: True if successful, False otherwise
-        """
-        try:
-            if self.redis is None:
-                logger.warning("Redis not available, skipping cache set")
-                return False
-
-            # Serialize the value to JSON
-            serialized_value = json.dumps(value, default=str)
-            self.redis.setex(key, expire, serialized_value)
-            logger.info(f"Cache set for key: {key} with expiration: {expire}s")
-            return True
-        except Exception as e:
-            logger.error(f"Failed to set cache for key {key}: {e}")
-            return False
-
     def get_cache(self, key: str) -> Optional[Any]:
         """
         Get cached value
@@ -75,6 +51,60 @@ class RedisClient:
         except Exception as e:
             logger.error(f"Failed to get cache for key {key}: {e}")
             return None
+
+    def set_cache(self, key: str, value: Any, expire: int = 3600) -> bool:
+        """
+        Set cache with expiration (default 1 hour)
+        Args:
+            key: Cache key
+            value: Value to cache (will be JSON serialized)
+            expire: Expiration time in seconds
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        try:
+            if self.redis is None:
+                logger.warning("Redis not available, skipping cache set")
+                return False
+
+            # Serialize the value to JSON
+            serialized_value = json.dumps(value, default=str)
+            self.redis.setex(key, expire, serialized_value)
+            logger.info(f"Cache set for key: {key} with expiration: {expire}s")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to set cache for key {key}: {e}")
+            return False
+
+    def clear_pattern(self, pattern: str) -> bool:
+        """
+        Clear all keys matching a pattern
+        Args:
+            pattern: Redis key pattern (e.g., "files:list:*")
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        try:
+            if self.redis is None:
+                logger.warning("Redis not available, skipping cache clear")
+                return False
+
+            # Get all keys matching the pattern
+            keys = self.redis.keys(pattern)
+            if keys:
+                logger.info(f"Found {len(keys)} keys matching pattern: {pattern}")
+                logger.info(f"Keys to delete: {keys}")
+
+                # Delete all keys
+                deleted_count = self.redis.delete(*keys)
+                logger.info(f"Successfully deleted {deleted_count} keys out of {len(keys)}")
+                return deleted_count > 0
+            else:
+                logger.info(f"No keys found matching pattern: {pattern}")
+                return True  # No keys to delete is considered successful
+        except Exception as e:
+            logger.error(f"Failed to clear cache for pattern {pattern}: {e}")
+            return False
 
     def is_connected(self) -> bool:
         """Check if Redis is connected"""

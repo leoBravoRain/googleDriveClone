@@ -8,6 +8,8 @@ from core.minio_client import get_minio_client, get_bucket_name
 from minio.error import S3Error
 from core.redis_client import RedisClient
 
+cache_key_pattern = "files:list:*"
+
 class FileService:
 
     def __init__(self):
@@ -91,6 +93,9 @@ class FileService:
         # save metadata to database
         self.file_repository.save_file_metadata(file_metadata)
 
+        # Clear file list cache when file is uploaded
+        self.redis_client.clear_pattern(cache_key_pattern)
+
         # TODO: normalize response
         return {
             "message": "File uploaded successfully",
@@ -166,6 +171,9 @@ class FileService:
             # Delete file metadata from database
             deleted = self.file_repository.delete_file(file_id)
 
+            # Clear file list cache when file is deleted
+            self.redis_client.clear_pattern(cache_key_pattern)
+
             if not deleted:
                 raise FileNotFoundError(f"File with id {file_id} not found")
 
@@ -197,6 +205,9 @@ class FileService:
 
             if not updated_file:
                 raise FileNotFoundError(f"File with id {file_id} not found")
+
+            # Clear file list cache when file is updated
+            self.redis_client.clear_pattern(cache_key_pattern)
 
             # TODO: normalize response
             return {
