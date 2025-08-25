@@ -39,6 +39,7 @@ services:
     depends_on:
       - mongodb
       - minio
+      - redis
     networks:
       - app-network
     restart: unless-stopped
@@ -89,6 +90,15 @@ services:
     volumes:
       - ./data/minio:/data
     command: server /data --console-address ":9001"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  #  Redis service
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
     networks:
       - app-network
     restart: unless-stopped

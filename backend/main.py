@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.database import connect_to_mongo, close_mongo_connection
 from core.minio_client import connect_to_minio, close_minio_connection
+from core.redis_client import RedisClient
 from routes.files_router import router as files_router
 
 app = FastAPI(
@@ -26,9 +27,15 @@ app.include_router(files_router, prefix = api_base_path)
 
 @app.on_event("startup")
 def startup_db_client():
-    """Connect to MongoDB on startup"""
+    """Connect to MongoDB and Redis on startup"""
     connect_to_mongo()
     connect_to_minio()
+    # Test Redis connection
+    redis_client = RedisClient()
+    if redis_client.is_connected():
+        print("✅ Redis connection established")
+    else:
+        print("⚠️  Redis connection failed - caching will be disabled")
 
 @app.on_event("shutdown")
 def shutdown_db_client():

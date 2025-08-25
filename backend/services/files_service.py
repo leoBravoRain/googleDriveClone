@@ -6,6 +6,7 @@ import uuid
 from datetime import datetime
 from core.minio_client import get_minio_client, get_bucket_name
 from minio.error import S3Error
+from core.redis_client import RedisClient
 
 class FileService:
 
@@ -13,6 +14,7 @@ class FileService:
         self.file_repository = FileRepository()
         self.minio_client = get_minio_client()
         self.bucket_name = get_bucket_name()
+        self.redis_client = RedisClient()
 
     def get_all_files(self, page: int = 1, limit: int = 10) -> dict:
         """
@@ -23,7 +25,27 @@ class FileService:
         Returns:
             dict with files and pagination info
         """
-        return self.file_repository.get_all_files(page=page, limit=limit)
+        # Create a unique cache key for this specific page and limit
+        cache_key = f"files:list:page:{page}:limit:{limit}"
+
+        # Try to get from cache first
+        cached_files = self.redis_client.get_cache(cache_key)
+        if cached_files:
+            print(f"Cache HIT: Returning cached files for {cache_key}")
+            return cached_files
+
+        # If not in cache, get from database
+        print(f"Cache MISS: Getting files from database for {cache_key}")
+        files = self.file_repository.get_all_files(page=page, limit=limit)
+
+        # Cache the result for 5 minutes (300 seconds)
+        cache_success = self.redis_client.set_cache(cache_key, files, expire=300)
+        if cache_success:
+            print(f"Successfully cached files for {cache_key}")
+        else:
+            print(f"Failed to cache files for {cache_key}")
+
+        return files
 
     # TODO: manage case when file was not uploaded to MinIO
     # TODO: change return type to normal response
