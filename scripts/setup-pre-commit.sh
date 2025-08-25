@@ -33,10 +33,6 @@ fi
 echo "🔧 Installing pre-commit hooks..."
 pre-commit install
 
-# Install commit-msg hook for commitizen
-echo "📝 Installing commit-msg hook..."
-pre-commit install --hook-type commit-msg
-
 # Install additional dependencies for the hooks
 echo "📚 Installing additional dependencies..."
 

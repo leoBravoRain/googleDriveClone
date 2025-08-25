@@ -78,19 +78,6 @@ repos:
         files: \.(ts|tsx|svelte)$
         stages: [pre-commit]
 
-  # # SvelteKit sync and check
-  # - repo: local
-  #   hooks:
-  #     - id: svelte-check
-  #       name: "Svelte - Type check"
-  #       description: "Run Svelte type checking"
-  #       entry: npm run check
-  #       language: system
-  #       pass_filenames: false
-  #       always_run: true
-  #       files: \.(svelte)$
-  #       stages: [commit]
-
   # Security checks
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.4.0
@@ -99,12 +86,12 @@ repos:
         description: "Detect secrets in code"
         args: ['--baseline', '.secrets.baseline', '--exclude-files', 'package-lock.json']
 
-  # # Commit message formatting
-  # - repo: https://github.com/commitizen-tools/commitizen
-  #   rev: v3.20.0
-  #   hooks:
-  #     - id: commitizen
-  #       stages: [commit-msg]
+  # Commit message formatting
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.20.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
 
 # Global configuration
 default_language_version:
