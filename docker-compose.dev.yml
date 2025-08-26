@@ -103,6 +103,19 @@ services:
       - app-network
     restart: unless-stopped
 
+  # Nest GraphQL service
+  nest-graphql:
+    build:
+      context: ./nest-graphql
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./nest-graphql:/app
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
