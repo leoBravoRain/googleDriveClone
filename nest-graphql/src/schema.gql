@@ -1,0 +1,12 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type FileType {
+  file_id: String!
+  filename: String!
+}
+
+type Query {
+  get_all_files: [FileType!]!
+}
