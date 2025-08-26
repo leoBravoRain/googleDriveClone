@@ -3,8 +3,17 @@
 # ------------------------------------------------------
 
 type File {
+  _id: String!
+  created_at: String!
   file_id: String!
+  file_type: String!
   filename: String!
+  original_name: String!
+  size: String!
+  storage_path: String!
+  updated_at: String!
+  updated_date: String!
+  user_id: String
 }
 
 type Query {
