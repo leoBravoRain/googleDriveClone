@@ -2,11 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type FileType {
+type File {
   file_id: String!
   filename: String!
 }
 
 type Query {
-  get_all_files: [FileType!]!
+  files: [File!]!
 }

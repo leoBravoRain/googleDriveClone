@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { FileResolver } from './graphql/resolvers/file.resolver';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -12,8 +12,9 @@ import { join } from 'path';
       sortSchema: true,
       playground: true,
     }),
+    FilesModule,
   ],
   controllers: [],
-  providers: [FileResolver],
+  providers: [],
 })
 export class AppModule {}
