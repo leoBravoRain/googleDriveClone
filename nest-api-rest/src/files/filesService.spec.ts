@@ -106,4 +106,12 @@ describe('FilesService', () => {
     expect(result[1]).toEqual(expectedFiles[1]);
     expect(result[2]).toEqual(expectedFiles[2]);
   });
+
+  it('should throw an error when API call is not successful', async () => {
+    // Arrange
+    mockFetch.mockRejectedValue(new Error('API call failed'));
+
+    // Act & Assert
+    await expect(filesService.findAll()).rejects.toThrow('API call failed');
+  });
 });
