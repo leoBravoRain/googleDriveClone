@@ -2,6 +2,8 @@
 
 A full-stack Google Drive clone built with SvelteKit, FastAPI, MongoDB, and MinIO.
 
+***Note*** This project is always in development as a learning, practicing, and portfolio project. The README may be outdated regarding the current implementation as the project evolves with new features, technologies, and architectural changes.
+
 ## 🏗️ Architecture
 
 ```
