@@ -227,7 +227,6 @@
 															type="text"
 															bind:value={editingFileName}
 															onkeydown={handleKeyPress}
-															autofocus
 															class="rounded border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
 														/>
 														<button
