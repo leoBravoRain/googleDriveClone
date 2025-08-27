@@ -53,6 +53,7 @@ repos:
         always_run: true
         files: ^frontend/
 
+  # TODO: commented for now because it's not working
   # # ESLint for JavaScript/TypeScript linting (local hook)
   # - repo: local
   #   hooks:
