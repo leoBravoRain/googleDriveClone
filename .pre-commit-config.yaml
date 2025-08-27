@@ -124,6 +124,19 @@ repos:
       - id: commitizen
         stages: [commit-msg]
 
+  # tests
+  - repo: local
+    hooks:
+      - id: test-nest-api-rest
+        name: "Test Nest API Rest"
+        description: "Run Nest API Rest tests"
+        entry: bash -c 'cd nest-api-rest && npm run test'
+        language: system
+        pass_filenames: false
+        always_run: true
+        files: ^nest-api-rest/
+        stages: [pre-commit]
+
 # Global configuration
 default_language_version:
   python: python3
