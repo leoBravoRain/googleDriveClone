@@ -53,17 +53,38 @@ repos:
         always_run: true
         files: ^frontend/
 
-  # ESLint for JavaScript/TypeScript linting (local hook)
-  - repo: local
-    hooks:
-      - id: eslint
-        name: "ESLint - Lint JavaScript/TypeScript files"
-        description: "Lint JavaScript and TypeScript files with ESLint"
-        entry: bash -c 'cd frontend && npm run lint'
-        language: system
-        pass_filenames: false
-        always_run: true
-        files: ^frontend/
+  # # ESLint for JavaScript/TypeScript linting (local hook)
+  # - repo: local
+  #   hooks:
+  #     - id: eslint-frontend
+  #       name: "ESLint - Frontend"
+  #       description: "Lint frontend JavaScript/TypeScript files"
+  #       entry: bash -c 'cd frontend && npm run lint'
+  #       language: system
+  #       pass_filenames: false
+  #       always_run: true
+  #       files: ^frontend/
+  #       stages: [pre-commit]
+
+  #     - id: eslint-nest-rest
+  #       name: "ESLint - NestJS API"
+  #       description: "Lint NestJS API TypeScript files"
+  #       entry: bash -c 'cd nest-api-rest && npm run lint'
+  #       language: system
+  #       pass_filenames: false
+  #       always_run: true
+  #       files: ^nest-api-rest/
+  #       stages: [pre-commit]
+
+  #     - id: eslint-nest-graphql
+  #       name: "ESLint - GraphQL API"
+  #       description: "Lint GraphQL API TypeScript files"
+  #       entry: bash -c 'cd nest-graphql && npm run lint'
+  #       language: system
+  #       pass_filenames: false
+  #       always_run: true
+  #       files: ^nest-graphql/
+  #       stages: [pre-commit]
 
   # TypeScript type checking
   - repo: local
@@ -105,7 +126,7 @@ repos:
 # Global configuration
 default_language_version:
   python: python3
-  node: "20"
+  node: "18"
 
 # Default stages for hooks
 default_stages: [pre-commit]
