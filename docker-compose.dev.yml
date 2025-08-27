@@ -116,6 +116,19 @@ services:
       - app-network
     restart: unless-stopped
 
+  # Nest API Rest service
+  nest-api-rest:
+    build:
+      context: ./nest-api-rest
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./nest-api-rest:/app
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
