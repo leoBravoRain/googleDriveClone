@@ -28,6 +28,7 @@ describe('FilesService', () => {
       json: jest.fn().mockResolvedValue({
         files: expectedFiles,
       }),
+      ok: true,
     } as unknown as Response);
 
     // Act
@@ -89,6 +90,7 @@ describe('FilesService', () => {
       json: jest.fn().mockResolvedValue({
         files: expectedFiles,
       }),
+      ok: true,
     } as unknown as Response);
 
     // Act
@@ -107,11 +109,24 @@ describe('FilesService', () => {
     expect(result[2]).toEqual(expectedFiles[2]);
   });
 
-  it('should throw an error when API call is not successful', async () => {
+  // case when fetch fails, even before getting a response from the API
+  it('should throw same error as fetch error when fetch fails', async () => {
     // Arrange
     mockFetch.mockRejectedValue(new Error('API call failed'));
 
     // Act & Assert
     await expect(filesService.findAll()).rejects.toThrow('API call failed');
+  });
+
+  // case when API call is successful, but the response is not ok
+  it('should throw an error when API call is not successful', async () => {
+    // Arrange
+    mockFetch.mockResolvedValue({
+      status: 500,
+      statusText: 'Internal Server Error',
+    } as unknown as Response);
+
+    // Act & Assert
+    await expect(filesService.findAll()).rejects.toThrow();
   });
 });
