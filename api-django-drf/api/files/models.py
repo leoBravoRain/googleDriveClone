@@ -1,5 +1,7 @@
-from mongoengine import Document, StringField, IntField, DateTimeField
 from datetime import datetime
+
+from mongoengine import DateTimeField, Document, IntField, StringField
+
 
 class File(Document):
     file_id = StringField(required=True)

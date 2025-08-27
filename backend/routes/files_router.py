@@ -1,7 +1,8 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+import io
+
+from fastapi import APIRouter, File, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from services.files_service import FileService
-import io
 
 module_name = 'files'
 # tags is for swagger documentation

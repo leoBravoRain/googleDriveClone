@@ -1,5 +1,7 @@
 from rest_framework import serializers
+
 from .models import File
+
 
 class FileSerializer(serializers.Serializer):
     """Serializer for mongoengine File document"""

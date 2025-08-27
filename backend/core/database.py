@@ -1,7 +1,9 @@
+import os
+from typing import Optional
+
 from pymongo import MongoClient
 from pymongo.database import Database
-from typing import Optional
-import os
+
 
 # Database connection
 class DatabaseManager:

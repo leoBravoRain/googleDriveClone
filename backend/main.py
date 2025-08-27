@@ -1,8 +1,8 @@
+from core.database import close_mongo_connection, connect_to_mongo
+from core.minio_client import close_minio_connection, connect_to_minio
+from core.redis_client import RedisClient
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from core.database import connect_to_mongo, close_mongo_connection
-from core.minio_client import connect_to_minio, close_minio_connection
-from core.redis_client import RedisClient
 from routes.files_router import router as files_router
 
 app = FastAPI(
