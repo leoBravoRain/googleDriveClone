@@ -130,7 +130,7 @@ describe('FilesService', () => {
     await expect(filesService.findAll()).rejects.toThrow();
   });
 
-  it('should throw error if file is not provided', async() => {
+  it('should throw error when file is not provided', async() => {
     // Arrange
     const file = undefined;
 
@@ -139,12 +139,12 @@ describe('FilesService', () => {
   });
 
   // test upolad file
-  it('should upload file when file is provided correctly', () => {
+  it('shuold throw error when file originalname is missing', async () => {
     //  Arrange
+    const file = {
+      originalname: undefined,
+    };
 
-    //  Act
-
-    // Assert
-    expect(true).toBe(true);
+    await expect(filesService.uploadFile(file)).rejects.toThrow('Upload failed: File originalname is missing');
   });
 });
