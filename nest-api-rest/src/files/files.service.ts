@@ -23,8 +23,6 @@ export class FilesService {
         throw new Error('API failed with status: ' + response.status);
       }
 
-      console.log('RESPONSE', response);
-
       const data = (await response.json()) as { files: File[] };
 
       return data.files;
@@ -79,7 +77,8 @@ export class FilesService {
         size: file.size,
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error occurred';
       throw new Error(`Upload failed: ${errorMessage}`);
     }
   }
