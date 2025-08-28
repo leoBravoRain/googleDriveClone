@@ -13,8 +13,6 @@ export class FilesService {
         throw new Error('API failed with status: ' + response.status);
       }
 
-      console.log('RESPONSE', response);
-
       const data = (await response.json()) as { files: File[] };
 
       return data.files;
