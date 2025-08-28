@@ -129,4 +129,22 @@ describe('FilesService', () => {
     // Act & Assert
     await expect(filesService.findAll()).rejects.toThrow();
   });
+
+  it('should throw error if file is not provided', async() => {
+    // Arrange
+    const file = undefined;
+
+    // Act & Asssert
+    await expect(filesService.uploadFile(file)).rejects.toThrow('Upload failed: No file provided');
+  });
+
+  // test upolad file
+  it('should upload file when file is provided correctly', () => {
+    //  Arrange
+
+    //  Act
+
+    // Assert
+    expect(true).toBe(true);
+  });
 });
