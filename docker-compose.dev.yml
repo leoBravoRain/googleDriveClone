@@ -123,8 +123,18 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
+    environment:
+      - MONGODB_URL=${MONGODB_URL}
+      # TODO: fix in projecr becuase it's not in the required format
+      # - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
     volumes:
       - ./nest-api-rest:/app
+    depends_on:
+      - mongodb
+      - minio
     networks:
       - app-network
     restart: unless-stopped

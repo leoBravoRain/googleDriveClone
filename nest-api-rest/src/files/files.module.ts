@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
-import { FilesService } from './files.service';
+import { MongooseModule } from '@nestjs/mongoose';
 import { FilesController } from './files.controller';
+import { FilesService } from './files.service';
+import { MinioService } from './minio.service';
+import { File, FileSchema } from './entities/file.entity';
 
 @Module({
+  imports: [
+    MongooseModule.forFeature([{ name: File.name, schema: FileSchema }]),
+  ],
   controllers: [FilesController],
-  providers: [FilesService],
+  providers: [FilesService, MinioService],
 })
 export class FilesModule {}
