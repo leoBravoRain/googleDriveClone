@@ -190,6 +190,35 @@ class LinkedList {
         this.head = newList.head;
     }
 
+    mergeSorted2(listToMerge: LinkedList) {
+        // to simplify the first element (at the end it returns dummy.next)
+        let dummy: ListNode = new ListNode(-1);
+
+        // get current iterator
+        let current: ListNode = dummy;
+
+        let l1: ListNode | null = this.head;
+        let l2: ListNode | null = listToMerge.head;
+
+        while(l1 !== null && l2 !== null) {
+            if(l1.value <= l2.value) {
+                current.next = l1;
+                l1 = l1.next;
+            }
+            else {
+                current.next = l2;
+                l2 = l2.next;
+            }
+
+            current = current.next;
+        }
+
+        if(l1 === null) current.next = l2;
+        if(l2 === null) current.next = l1;
+
+        return dummy.next;
+    }
+
 }
 
 let list1 = new LinkedList();
@@ -224,5 +253,5 @@ assertEquals(list1.findMiddleNode()?.value, 3, 'should return the middle node wh
 // list1.concatenate(list2)
 // assertEquals(list1.traverse(), [5,4,3,2,1,6,7], 'should concatenate lists when executing concatenate()')
 
-list1.mergeSorted(list2)
+list1.mergeSorted2(list2)
 assertEquals(list1.traverse(), [1, 2, 3, 7], 'should sort the list when running mergeSeorted()');
