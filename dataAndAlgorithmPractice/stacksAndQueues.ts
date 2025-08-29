@@ -7,8 +7,8 @@ class Stack<T> {
     }
 
     // remove element fro top of stack
-    pull() {
-        this.items.pop();
+    pull(): T | undefined {
+        return this.items.pop();
     }
 
     // see top element
@@ -92,34 +92,35 @@ console.log(queue.peek())
 // vlidat parenthesis
 function isValidParenthesis(word: string) {
 
-    const closingPar = {
-        '{': '}',
-        '[': ']',
-        '(': ')'
+    if(!word) return false;
+
+    // stack to keep track of opening parenthesis
+    let parenthesis = new Stack<string>();
+
+    // dict to store parenthesis
+    const dictPar: { [key: string]: string } = {
+        ')': '(',
+        ']': '[',
+        '}': '{'
     };
 
-    // 1) iterate over string (array iteration)
-    for(let i = 0; i <= word.length; ++i) {
+    // iterate over character
+    for(let i=0; i<=word.length; ++i) {
 
         let char = word[i];
 
-        if (char == "{" || char == "[" || char == '(') {
-
-            let isClosed = false;
-            for (let j= i + 1; j <= word.length; ++j  ){
-                let charNext = word[j];
-                if(charNext === closingPar[char]) {
-                    isClosed = true;
-                }
-            }
-            if(!isClosed) return false
+        // if it's opening parenthesis
+        if(char === '(' || char === '{' || char === '['){
+            parenthesis.push(char);
         }
-
+        // if it's a closing parenthesis
+        else {
+            if(parenthesis.pull() !== dictPar[char]) return false
+        }
     }
 
-    return true;
+    return parenthesis.isEmpty();
 
-    // analize full object. Analyze if all the values for that key are true
 }
 
-console.log(isValidParenthesis('(){}[]'));
+console.log(isValidParenthesis('([)]'));
