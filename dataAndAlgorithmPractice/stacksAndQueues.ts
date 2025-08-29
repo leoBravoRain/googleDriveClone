@@ -123,4 +123,70 @@ function isValidParenthesis(word: string) {
 
 }
 
+
 console.log(isValidParenthesis('([)]'));
+
+class StackWithMinTracking <T> {
+    private readonly items: T[] = [];
+    // private readonly mins: T[] = [];
+    private readonly mins = new Stack<number>;
+
+    // add element on top of stack
+    push(item: T) {
+
+        // push on items
+        this.items.push(item);
+
+        // update mins if necesary
+        // check top from min d
+        // if top is <= new item  => push item to mins
+        if(this.mins.isEmpty() || item <= this.mins.peek()) {
+            this.mins.push(item);
+        }
+        // if top > new item => nothing
+    }
+
+    // remove element fro top of stack
+    pull(): T | undefined {
+
+        // check if update mins
+        // check if elemnt to remove is the same last element of mins
+        if(this.items[this.items.length -1] === this.mins.peek()){
+            this.mins.pull()
+        }
+
+        // remove last element
+        return this.items.pop();
+    }
+
+    // see top element
+    peek(): T | undefined {
+        return this.items[this.items.length - 1];
+    }
+
+    isEmpty(): boolean {
+        return this.items.length === 0;
+    }
+
+    size(): number {
+        return this.items.length;
+    }
+
+    getMin(): T {
+        return this.mins.peek();
+    }
+}
+
+let stackWithMin = new StackWithMinTracking<number>();
+
+stackWithMin.push(3);
+console.log(stackWithMin.getMin())
+
+stackWithMin.push(2);
+console.log(stackWithMin.getMin())
+
+stackWithMin.push(1);
+console.log(stackWithMin.getMin())
+
+stackWithMin.pull()
+console.log(stackWithMin.getMin())
