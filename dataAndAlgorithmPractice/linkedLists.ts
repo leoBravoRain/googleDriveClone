@@ -229,7 +229,35 @@ class LinkedList {
 
         // when reach the last node, update next of prev to null
         if(prev) {prev.next = null}
-        // else (current = null)
+    }
+
+    removeElementFromEnd(n = number) {
+
+        const dummy = new ListNode(0);
+        dummy.next = this.head;
+
+        let slow: ListNode | null = dummy;
+        let fast: ListNode | null = dummy;
+
+        // Move fast pointer n+1 steps ahead
+        for (let i = 0; i <= n; i++) {
+            if (fast) fast = fast.next;
+        }
+
+        // Move both pointers until fast reaches the end
+        while (fast) {
+            slow = slow!.next;
+            fast = fast.next;
+        }
+
+        // Remove the node
+        if (slow && slow.next) {
+            slow.next = slow.next.next;
+        }
+
+        // Update head in case first node was removed
+        this.head = dummy.next;
+
     }
 
 }
