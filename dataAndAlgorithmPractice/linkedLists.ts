@@ -1,9 +1,9 @@
 function assertEquals(actual: any, expected: any, testName: string) {
     if(JSON.stringify(actual) === JSON.stringify(expected)){
-        console.log(`Test ${testName} passed`);
+        console.log(`Test ${testName} passed ✅`);
     }
     else {
-        console.log(`Test ${testName} failed`);
+        console.log(`Test ${testName} failed ❌`);
     }
 }
 
@@ -71,6 +71,21 @@ class LinkedList {
         this.head = prev;
     }
 
+    setLastAsLink() {
+        let current: ListNode | null = this.head;
+        let prev: ListNode | null = null;
+
+        while(current?.next){
+            prev = current;
+            current = current.next;
+        }
+
+        // link last to prev
+        if (current) {
+            current.next = prev;
+        }
+    }
+
     isCycle(): boolean {
         let current: ListNode | null = this.head;
         let prev: ListNode | null = null;
@@ -87,19 +102,26 @@ class LinkedList {
         return isCycle
     }
 
-    setLastAsLink() {
-        let current: ListNode | null = this.head;
-        let prev: ListNode | null = null;
+    // O(n)
+    // Tortoise (current.next) and Hale (current.next.next) algorithm.
+    isCycleFloidAlgorithm() {
+        let slow: ListNode | null | undefined = this.head;
+        let fast: ListNode | null | undefined = this.head;
+        let isCycle: boolean = false;
 
-        while(current?.next){
-            prev = current;
-            current = current.next;
+        while(fast && !isCycle){
+
+            // update slow and fast
+            slow = slow?.next;
+            fast = fast?.next?.next;
+
+            // fast reach slow (cycle)
+            if (fast === slow) {
+                isCycle = true;
+            }
         }
 
-        // link last to prev
-        if (current) {
-            current.next = prev;
-        }
+        return isCycle;
     }
 
 }
@@ -120,3 +142,4 @@ assertEquals(list1.isCycle(), false, 'shuold not be cycle when list is not cycle
 // convert to cycle
 list1.setLastAsLink()
 assertEquals(list1.isCycle(), true, 'shuold be cycle when list is closed');
+assertEquals(list1.isCycleFloidAlgorithm(), true, 'should be cycle when list is closed (floid algorithm)');

@@ -1,0 +1,16 @@
+{
+  "name": "data-and-algorithm-practice",
+  "version": "1.0.0",
+  "description": "Data structures and algorithms practice",
+  "main": "linkedLists.ts",
+  "type": "module",
+  "scripts": {
+    "start": "tsx linkedLists.ts",
+    "test": "tsx linkedLists.ts",
+    "dev": "tsx watch linkedLists.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}
