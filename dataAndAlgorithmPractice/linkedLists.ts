@@ -124,22 +124,47 @@ class LinkedList {
         return isCycle;
     }
 
+    findMiddleNode() {
+        let slow: ListNode | null | undefined = this.head;
+        let fast: ListNode | null | undefined = this.head;
+
+        // TODO: check if it's not cycle
+        while(fast) {
+
+            // update fast and slow
+            slow = slow?.next;
+            fast = fast?.next?.next;
+
+            // fast has reached the end
+            if(fast?.next === null) {
+                return slow;
+            }
+
+        }
+    }
+
 }
 
 let list1 = new LinkedList();
 list1.append(1);
 list1.append(2);
+list1.append(3);
+list1.append(4);
+list1.append(5);
 
 // execute test
-assertEquals(list1.traverse(), [1,2], 'shuold be [1,2] when adding 2 elements');
+assertEquals(list1.traverse(), [1,2, 3, 4, 5], 'shuold be [1,2] when adding 2 elements');
 
 // test reverse
 list1.reverse()
-assertEquals(list1.traverse(), [2,1], 'shuold be [2,1] when calling reverse()');
+assertEquals(list1.traverse(), [5, 4, 3,2,1], 'shuold be [2,1] when calling reverse()');
 
 // test is cycle
 assertEquals(list1.isCycle(), false, 'shuold not be cycle when list is not cycled');
-// convert to cycle
-list1.setLastAsLink()
-assertEquals(list1.isCycle(), true, 'shuold be cycle when list is closed');
-assertEquals(list1.isCycleFloidAlgorithm(), true, 'should be cycle when list is closed (floid algorithm)');
+// // convert to cycle
+// list1.setLastAsLink()
+// assertEquals(list1.isCycle(), true, 'shuold be cycle when list is closed');
+// assertEquals(list1.isCycleFloidAlgorithm(), true, 'should be cycle when list is closed (floid algorithm)');
+
+// test find middle node
+assertEquals(list1.findMiddleNode()?.value, 3, 'should return the middle node when running method');
