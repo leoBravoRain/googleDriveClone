@@ -88,3 +88,38 @@ queue.enqueue(5);
 console.log(queue.peek())
 queue.dequeue()
 console.log(queue.peek())
+
+// vlidat parenthesis
+function isValidParenthesis(word: string) {
+
+    const closingPar = {
+        '{': '}',
+        '[': ']',
+        '(': ')'
+    };
+
+    // 1) iterate over string (array iteration)
+    for(let i = 0; i <= word.length; ++i) {
+
+        let char = word[i];
+
+        if (char == "{" || char == "[" || char == '(') {
+
+            let isClosed = false;
+            for (let j= i + 1; j <= word.length; ++j  ){
+                let charNext = word[j];
+                if(charNext === closingPar[char]) {
+                    isClosed = true;
+                }
+            }
+            if(!isClosed) return false
+        }
+
+    }
+
+    return true;
+
+    // analize full object. Analyze if all the values for that key are true
+}
+
+console.log(isValidParenthesis('(){}[]'));
