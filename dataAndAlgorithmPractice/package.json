@@ -5,7 +5,8 @@
   "main": "linkedLists.ts",
   "type": "module",
   "scripts": {
-    "start": "tsx linkedLists.ts",
+    "start:lists": "tsx linkedLists.ts",
+    "start:stacks": "tsx stacksAndQueues.ts",
     "test": "tsx linkedLists.ts",
     "dev": "tsx watch linkedLists.ts"
   },
