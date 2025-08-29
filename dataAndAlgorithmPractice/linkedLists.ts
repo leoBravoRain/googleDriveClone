@@ -219,6 +219,19 @@ class LinkedList {
         return dummy.next;
     }
 
+    removeLastElement():void {
+        let current: ListNode | null = this.head;
+        let prev: ListNode | null = null;
+        while(current?.next) {
+            prev = current;
+            current = current.next;
+        }
+
+        // when reach the last node, update next of prev to null
+        if(prev) {prev.next = null}
+        // else (current = null)
+    }
+
 }
 
 let list1 = new LinkedList();
@@ -255,3 +268,7 @@ assertEquals(list1.findMiddleNode()?.value, 3, 'should return the middle node wh
 
 list1.mergeSorted2(list2)
 assertEquals(list1.traverse(), [1, 2, 3, 7], 'should sort the list when running mergeSeorted()');
+
+console.log(list1.traverse())
+list1.removeLastElement()
+console.log(list1.traverse())
