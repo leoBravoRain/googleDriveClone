@@ -143,6 +143,23 @@ class LinkedList {
         }
     }
 
+    merge(listToMerge: LinkedList) {
+        let current: ListNode | null = this.head;
+
+        // traverse until end of list
+        while(current?.next) {
+            current = current.next;
+        }
+
+        // update next current ot head of listToMerge
+        if (current) {
+            current.next = listToMerge.head;
+        }
+        else {
+            this.head = listToMerge.head;
+        }
+    }
+
 }
 
 let list1 = new LinkedList();
@@ -151,6 +168,10 @@ list1.append(2);
 list1.append(3);
 list1.append(4);
 list1.append(5);
+
+let list2 = new LinkedList();
+list2.append(6);
+list2.append(7);
 
 // execute test
 assertEquals(list1.traverse(), [1,2, 3, 4, 5], 'shuold be [1,2] when adding 2 elements');
@@ -168,3 +189,7 @@ assertEquals(list1.isCycle(), false, 'shuold not be cycle when list is not cycle
 
 // test find middle node
 assertEquals(list1.findMiddleNode()?.value, 3, 'should return the middle node when running method');
+
+// test merge
+list1.merge(list2)
+assertEquals(list1.traverse(), [5,4,3,2,1,6,7], 'should merge lists when executing merge()')
