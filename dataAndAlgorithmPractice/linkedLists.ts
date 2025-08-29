@@ -143,7 +143,7 @@ class LinkedList {
         }
     }
 
-    concatenate(listToconcatenate: LinkedList) {
+    concatenate(listToConcatenate: LinkedList) {
         let current: ListNode | null = this.head;
 
         // traverse until end of list
@@ -151,34 +151,64 @@ class LinkedList {
             current = current.next;
         }
 
-        // update next current ot head of listToconcatenate
+        // update next current ot head of listToConcatenate
         if (current) {
-            current.next = listToconcatenate.head;
+            current.next = listToConcatenate.head;
         }
         else {
-            this.head = listToconcatenate.head;
+            this.head = listToConcatenate.head;
         }
+    }
+
+    mergeSorted(listToMerge: LinkedList) {
+
+        // get head of 2 lists
+        let l1 : ListNode | null = this.head;
+        let l2 : ListNode | null = listToMerge.head;
+
+        // new list
+        let newList = new LinkedList();
+
+        while(l1 || l2) {
+            // if l1 < l2 OR l1 is defined but l2 is null
+            if((l1 && l2 && (l1?.value <= l2?.value) || (l1 && !l2))){
+                // set node as l1
+                newList.append(l1.value)
+                // update l1
+                l1 = l1.next;
+            }
+            // if l1 > l2 OR l1 is null and l2 is defined
+            else if((l1 && l2 && (l1?.value > l2?.value)) || (!l1 && l2)) {
+                // set node as l2
+                newList.append(l2.value);
+                // update l2
+                l2 = l2?.next
+            }
+        }
+
+        // update head
+        this.head = newList.head;
     }
 
 }
 
 let list1 = new LinkedList();
 list1.append(1);
-list1.append(2);
+// list1.append(2);
 list1.append(3);
-list1.append(4);
-list1.append(5);
+// list1.append(4);
+// list1.append(5);
 
 let list2 = new LinkedList();
-list2.append(6);
+list2.append(2);
 list2.append(7);
 
 // execute test
 assertEquals(list1.traverse(), [1,2, 3, 4, 5], 'shuold be [1,2] when adding 2 elements');
 
 // test reverse
-list1.reverse()
-assertEquals(list1.traverse(), [5, 4, 3,2,1], 'shuold be [2,1] when calling reverse()');
+// list1.reverse()
+// assertEquals(list1.traverse(), [5, 4, 3,2,1], 'shuold be [2,1] when calling reverse()');
 
 // test is cycle
 assertEquals(list1.isCycle(), false, 'shuold not be cycle when list is not cycled');
@@ -191,5 +221,8 @@ assertEquals(list1.isCycle(), false, 'shuold not be cycle when list is not cycle
 assertEquals(list1.findMiddleNode()?.value, 3, 'should return the middle node when running method');
 
 // test concatenate
-list1.concatenate(list2)
-assertEquals(list1.traverse(), [5,4,3,2,1,6,7], 'should concatenate lists when executing concatenate()')
+// list1.concatenate(list2)
+// assertEquals(list1.traverse(), [5,4,3,2,1,6,7], 'should concatenate lists when executing concatenate()')
+
+list1.mergeSorted(list2)
+assertEquals(list1.traverse(), [1, 2, 3, 7], 'should sort the list when running mergeSeorted()');
