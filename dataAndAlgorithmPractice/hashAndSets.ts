@@ -58,8 +58,42 @@ function twoSumHashMap(nums: number[], target: number) {
     return [];
 }
 
+function containsDuplicate(nums: number[]): boolean {
+    let set = new Set<number>(nums);
+
+    return set.size !== nums.length;
+}
+
+function groupAnagrams(words: string[]): string[][] {
+
+    let anagrams = new Map<string, string[]>();
+
+    for(let i = 0; i<words.length; ++i) {
+
+        let word = words[i];
+
+        // get cannonical key
+        let cannonicalKey = word.split('').sort().join('');
+
+        // if not in map, then add it as key, [] (empty array)
+        if(!anagrams.has(cannonicalKey)) {
+            anagrams.set(cannonicalKey, []);
+        }
+
+        // add word to cannonical key
+        // anagrams.set(cannonicalKey, anagrams.get(cannonicalKey)?.push(words[i]));
+        anagrams.get(cannonicalKey)!.push(word);
+    }
+
+    return Array.from(anagrams.values());
+}
+
+// [1,2,3] ; target = 3 -> [1,2], [3] = 2
+
 // test for two sum
 console.log(assertEquals(twoSumHashMap([1, 3, 6, 2], 5), [1, 3], 'should return expected when target is 5'));
+console.log(assertEquals(containsDuplicate([1,2]), false, 'should return true when there is duplicated elements' ));
+console.log(assertEquals(groupAnagrams(["eat","tea","tan","ate","nat","bat"]), [["eat","tea","ate"],["tan","nat"],["bat"]], 'testing group anagrams'));
 
 
 const set = new Set<string>;
