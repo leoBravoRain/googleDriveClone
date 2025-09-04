@@ -9,6 +9,7 @@
     "start:stacks": "tsx stacksAndQueues.ts",
     "start:hash": "tsx hashAndSets.ts",
     "start:trees": "tsx src/trees.ts",
+    "start:graphs": "tsx src/graphs.ts",
     "test": "tsx linkedLists.ts",
     "dev": "tsx watch linkedLists.ts"
   },
