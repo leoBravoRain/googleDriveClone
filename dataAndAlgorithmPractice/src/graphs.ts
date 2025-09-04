@@ -41,10 +41,11 @@ function dfsRecursive(_graph: Graph, node: string, visited = new Set<string>()):
     }
 }
 
-function dfsIterative(_graph: Graph, start: string) {
+function dfsIterative(_graph: Graph, start: string): number {
 
     let stack: string[] = [start];
     let visited = new Set<string>();
+    let numNodes = 0;
 
     while(stack.length > 0) {
 
@@ -62,6 +63,9 @@ function dfsIterative(_graph: Graph, start: string) {
             // update visited
             visited.add(node);
 
+            // update nodes counter
+            numNodes += 1;
+
             console.log('visited: ', visited);
 
             console.log(`neighbords of ${node}: ${_graph.getNeighbors(node)}`);
@@ -73,6 +77,8 @@ function dfsIterative(_graph: Graph, start: string) {
         }
 
     }
+
+    return numNodes
 
 
 }
@@ -134,3 +140,62 @@ console.log('graph: ', graph);
 // console.log('dfs recursive: ', dfsRecursive(graph, 'A'));
 console.log('dfs iterative: ', dfsIterative(graph, 'A'));
 console.log('bfs iterative: ', bfsIterative(graph, 'A'));
+
+// algorithms
+
+// Number of islands
+function numIsland(grid: number[][]): number{
+
+    // keep track of island
+    let counter = 0;
+
+    const rows = grid.length;
+    const cols = grid[0].length;
+
+    // remove island from an specific 1 (from 1 to 0)
+    function dfsInternal(r: number, c: number) {
+
+        // console.log(`removing island from index: [${r}, ${c}] `);
+
+        // it's not part of the island
+        if (c < 0 || c > cols-1 || r < 0 || r > rows-1 || grid[r][c] === 0) {
+            return
+        }
+
+        // mark visited node as 0
+        grid[r][c] = 0;
+
+        // check all neighbors
+        dfsInternal(r, c - 1);
+        dfsInternal(r, c + 1);
+        dfsInternal(r+1, c);
+        dfsInternal(r-1, c);
+    }
+
+    // iterate over each element in matrix
+    for(let r = 0; r < rows; ++r ) {
+        for(let c = 0; c < cols; ++c ) {
+
+            if(grid[r][c] === 1) {
+
+                // remove elements from same island (mark as 0)
+                dfsInternal(r, c);
+
+                // update island counter
+                ++counter;
+            }
+        }
+    }
+
+    return counter;
+
+}
+
+let grid = [
+    [1, 1, 0, 0],
+    [1, 0, 1, 1],
+    [0, 0, 1, 1],
+    [1, 0, 1, 1]
+]
+
+console.log('num islands: ', numIsland(grid));
