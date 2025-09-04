@@ -15,11 +15,11 @@ class Graph {
     }
 
     getNeighbors(v1: string) {
-        return this.adjList.get('A');
+        return this.adjList.get(v1);
     }
 }
 
-function dfs(_graph: Graph, node: string, visited = new Set<string>()): void {
+function dfsRecursive(_graph: Graph, node: string, visited = new Set<string>()): void {
 
     // check if node was already visited
     if(visited.has(node)) return;
@@ -37,20 +37,78 @@ function dfs(_graph: Graph, node: string, visited = new Set<string>()): void {
     // iterate over each neighbor
     for(const neighbor of _graph.getNeighbors(node)) {
         // console.log(`neighbor to visit: ${neighbor}`);
-        dfs(_graph, neighbor, visited);
+        dfsRecursive(_graph, neighbor, visited);
     }
 }
 
-function dfsRecursive(graph: Graph, start: string, visited = new Set<string>()) {
-    if (visited.has(start)) return;
-    console.log(start);
-    visited.add(start);
+function dfsIterative(_graph: Graph, start: string) {
 
-    for (const neighbor of graph.getNeighbors(start)) {
-      dfsRecursive(graph, neighbor, visited);
+    let stack: string[] = [start];
+    let visited = new Set<string>();
+
+    while(stack.length > 0) {
+
+        console.log('stack: ', stack);
+
+        // remove last elemtn (LIFO)
+        let node = stack.pop();
+
+        // skip visited
+        if(!visited.has(node)) {
+
+            // visit node
+            console.log('visiting: ', node);
+
+            // update visited
+            visited.add(node);
+
+            console.log('visited: ', visited);
+
+            console.log(`neighbords of ${node}: ${_graph.getNeighbors(node)}`);
+
+            // push neighbors to stack (LIFO)
+            for(const neighbor of _graph.getNeighbors(node)) {
+                if(!visited.has(neighbor))stack.push(neighbor);
+            }
+        }
+
     }
-  }
 
+
+}
+
+function bfsIterative(_graph: Graph, start: string) {
+
+    let queue: string[] = [start];
+    let visited = new Set<string>();
+
+    while(queue.length > 0) {
+
+        console.log('queue: ', queue);
+
+        // remove last elemtn (LIFO)
+        let node = queue.shift();
+
+        // skip visited
+        if(!visited.has(node)) {
+
+            // visit node
+            console.log('visiting: ', node);
+
+            // update visited
+            visited.add(node);
+
+            console.log('visited: ', visited);
+
+            console.log(`neighbords of ${node}: ${_graph.getNeighbors(node)}`);
+
+            // push neighbors to queue (LIFO)
+            for(const neighbor of _graph.getNeighbors(node)) {
+                queue.push(neighbor);
+            }
+        }
+    }
+}
 // A - B
 // |   |
 // C - D
@@ -72,6 +130,7 @@ graph.addEdge('A', 'C');
 graph.addEdge('B', 'D');
 graph.addEdge('D', 'C');
 
-console.log(graph);
-console.log(dfs(graph, 'A'));
-console.log(dfsRecursive(graph, 'A'));
+console.log('graph: ', graph);
+// console.log('dfs recursive: ', dfsRecursive(graph, 'A'));
+console.log('dfs iterative: ', dfsIterative(graph, 'A'));
+console.log('bfs iterative: ', bfsIterative(graph, 'A'));
