@@ -11,6 +11,7 @@
     "start:trees": "tsx src/trees.ts",
     "start:graphs": "tsx src/graphs.ts",
     "start:sort": "tsx src/sortAlgorithms.ts",
+    "start:search": "tsx src/search.ts",
     "test": "tsx linkedLists.ts",
     "dev": "tsx watch linkedLists.ts"
   },
