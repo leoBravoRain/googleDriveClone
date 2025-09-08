@@ -191,11 +191,52 @@ function numIsland(grid: number[][]): number{
 
 }
 
+class NodeValue {
+    value: number;
+    neighbors: Node[];
+
+    constructor(value: number, neighbors?: NodeValue[]) {
+        this.value = value;
+        this.neighbors = [];
+    }
+}
+
+function cloneGraph(node: NodeValue) {
+
+    // visited node (to avoid cycle loop)
+    let oldToNew = new Map<NodeValue, NodeValue>();
+
+    // visit each node in graph
+    function dfsInternal(_node: NodeValue) {
+
+        // if already visited, then return that node
+        if(oldToNew.has(_node)) return oldToNew.get(_node);
+
+        // create copy node iwth value and without neighbors
+        let copy = new NodeValue(_node.value);
+
+        // add copy to visited
+        oldToNew.set(_node, copy);
+
+        // iterate over each neighbor and create copy
+        for(const nei of _node.neighbors) {
+            copy.neighbors.push(dfsInternal(nei));
+        }
+
+        return copy;
+
+    }
+
+    return dfsInternal(node);
+};
+
 let grid = [
     [1, 1, 0, 0],
     [1, 0, 1, 1],
     [0, 0, 1, 1],
     [1, 0, 1, 1]
 ]
+
+let root = new NodeValue(1, [new NodeValue()])
 
 console.log('num islands: ', numIsland(grid));

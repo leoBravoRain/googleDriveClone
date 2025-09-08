@@ -10,6 +10,7 @@
     "start:hash": "tsx hashAndSets.ts",
     "start:trees": "tsx src/trees.ts",
     "start:graphs": "tsx src/graphs.ts",
+    "start:sort": "tsx src/sortAlgorithms.ts",
     "test": "tsx linkedLists.ts",
     "dev": "tsx watch linkedLists.ts"
   },
